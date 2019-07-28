@@ -1,0 +1,7 @@
+MRIVolume
+
+	MRIDimensions from float[] to int[]
+	- same with MRISlice
+
+MRI
+	get dimensions function, from float[] to int[] 

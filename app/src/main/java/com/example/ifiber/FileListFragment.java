@@ -1,0 +1,139 @@
+package com.example.ifiber;
+
+import android.app.Activity;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+public class FileListFragment extends ListFragment {
+
+    private List<String> item = null;
+    private TextView FileName;
+    public boolean DisplayFiles[];
+    MyFilesListArrayAdapter fileList;
+    List<String> files;
+    int percentage;
+    public SeekBar percent;
+
+
+    void refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
+    void detach(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.fragment_files_list, container,false);
+
+        FileName = (TextView)view.findViewById(R.id.FileText);
+        item = new ArrayList<String>();
+        files = ((MainActivity)getActivity()).myRenderer.DisplayedFiles;
+        DisplayFiles =  new boolean[files.size()];
+        fileList = new MyFilesListArrayAdapter(getActivity(),files, DisplayFiles);
+
+        Button SelectAll = (Button) view.findViewById(R.id.delete_button);
+            SelectAll.setOnClickListener(new View.OnClickListener() {
+               @Override
+                public void onClick(View v) {
+                    for(int i=0;i< DisplayFiles.length;i++ ){
+                        if (DisplayFiles[i]){
+                            String fileName = files.get(i);
+                            if (fileName.endsWith(".nii")|| fileName.endsWith(".nii.gz")){
+                                String axis[] = { "X","Y","Z","MRI","vol"};
+                                for (String s : axis){
+                                    ((MainActivity) getActivity()).myRenderer.sceneTree.remove(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName+s));
+                                    if(( (MainActivity) getActivity()).myRenderer.cameraBasedObjects.contains(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName+s))){
+                                        ((MainActivity) getActivity()).myRenderer.cameraBasedObjects.remove(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName+s));
+                                    }
+                                    ((MainActivity) getActivity()).myRenderer.listDisplayedObjects.remove(fileName+s);
+
+                                }
+                            }
+                            else{
+                                ((MainActivity) getActivity()).myRenderer.sceneTree.remove(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName));
+                                if(( (MainActivity) getActivity()).myRenderer.cameraBasedObjects.contains(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName))){
+                                    ((MainActivity) getActivity()).myRenderer.cameraBasedObjects.remove(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName));
+                                }
+                                ((MainActivity) getActivity()).myRenderer.listDisplayedObjects.remove(fileName);
+                            }
+
+                            ((MainActivity) getActivity()).myRenderer.DisplayedFiles.remove(fileName);
+                            refresh();
+                            ((MainActivity) getActivity()).mGLView.requestRender();
+                        }
+
+                    }
+                }
+            });
+            Button UnselectAll = (Button) view.findViewById(R.id.settings_button);
+            UnselectAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int counter = 0;
+                    for(int i=0;i< DisplayFiles.length;i++ ){
+                        if (DisplayFiles[i]){
+                            counter++;
+                        }
+                    }
+                    if(counter>1)
+                        Toast.makeText(getActivity(),"Only one element must be selected",Toast.LENGTH_LONG).show();
+                    else{
+                        for(int i=0;i< DisplayFiles.length;i++ ){
+                            if (DisplayFiles[i]){
+                                String fileName = files.get(i);
+                                if (fileName.endsWith(".nii") || fileName.endsWith(".nii.gz"))
+                                    ((MainActivity) getActivity()).startMRI_settings(fileName);
+
+                            }
+                        }
+                    }
+                }
+            });
+
+        setListAdapter(fileList);
+        return view;
+    }
+
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        ((CheckBox)v.findViewById(R.id.bundlecheckbox)).toggle();
+        DisplayFiles[position] = !DisplayFiles[position];
+
+        ((MainActivity) getActivity()).mGLView.requestRender();
+    }
+
+    private void ChangeState(View v,Vector<String> bundles, boolean isChecked){
+        for (int i = 0; i < bundles.size(); i++) {
+            DisplayFiles[i] = isChecked;
+        }
+        fileList.notifyDataSetChanged();
+        ((MainActivity) getActivity()).mGLView.requestRender();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+}
