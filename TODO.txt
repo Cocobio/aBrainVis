@@ -1,7 +1,32 @@
-MRIVolume
+TODO:
+    MRI
+    	Settings working with multiples images
+    Bundle visualization segment using EBO, for percentage and selected Bundles
+    Mesh
+        GUI for interaction with Mesh object
+    MRI Slice
+        GUI for interaction with Slice object
+    GUI for boundingbox drawing
+    Fix apk install failure
 
-	MRIDimensions from float[] to int[]
-	- same with MRISlice
+EMERGENCY:
 
-MRI
-	get dimensions function, from float[] to int[] 
+FREEZED:
+
+DOING:
+    Boundingbox drawing function
+    In MRIVolume:
+        MRIDimensions from float[] to int[]
+    	Same with MRISlice
+    MRI
+    	Get dimensions function, from float[] to int[]
+
+DONE:
+    Mesh
+        Add lines and point visualization
+        Modify triangle, lines and points color
+        Modify transparency
+
+    MRI Slice
+        Thresholding slice visualization
+        Modify contrast and bright
