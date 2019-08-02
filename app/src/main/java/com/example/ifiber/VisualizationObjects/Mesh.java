@@ -35,10 +35,12 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     private int[] sortedTriangleIndexes;
     private boolean updateGL = false;
 
-    private float[] tColor = {0.7f, 0.7f, 0.7f};
+    private float[] pColor = {0, 1, 0};
     private float[] lColor = {0, 0, 0};
+    private float[] tColor = {0.7f, 0.7f, 0.7f};
     private float alpha = 0.5f;
 
+    private boolean drawPoints = false;
     private boolean drawLines = false;
 
 
@@ -70,7 +72,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         calculateTriangleCentroid();
 
-        Log.d(TAG, "Loading ready "+filePath+" "+faces.length/3+" triangles and "+vertex.length/3+" vertex.");
+        Log.d(TAG, "Loading ready "+filePath+" "+faces.length/4+" triangles and "+vertex.length/3+" vertex.");
     }
 
 
@@ -111,7 +113,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
             vertex = new float[nVertexVector*3];
             normals = new float[nNormalsVector*3];
-            faces = new int[nFacesVector*3];
+            faces = new int[nFacesVector*4];
 
             buf_in.position(29 + 4);
             buf_in.asFloatBuffer().get(vertex, 0, nVertexVector*3);
@@ -120,7 +122,13 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
             buf_in.asFloatBuffer().get(normals, 0, nNormalsVector*3);
 
             buf_in.position(29 + 4 + nVertexVector*3*4 + 4 +nNormalsVector*3*4+4+4);
-            buf_in.asIntBuffer().get(faces, 0, nFacesVector*3);
+
+            IntBuffer tmpBuffer = buf_in.asIntBuffer();
+            for(int i=0; i<nFacesVector; i++) {
+                tmpBuffer.get(faces, i*4, 3);
+                faces[i*4+3] = -1;
+            }
+
         }catch (IOException ex) {
             Log.e(TAG, "Error at reading file "+fileName+" : " + ex.toString());
             System.err.println(ex.getMessage());
@@ -193,15 +201,22 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         configGL();
         if(updateGL) loadSortedEBO();
 
+        // Draw points
+        if (drawPoints) {
+            GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), 1.0f);
+            GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, pColor, 0);
+//            GLES32.glLineWidth(0.01f);
+            GLES32.glDrawElements(GLES32.GL_POINTS, faces.length, GLES32.GL_UNSIGNED_INT, 0);
+//            GLES32.glLineWidth(1f);
+        }
+
         // Draw lines
         if (drawLines) {
             GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), 1.0f);
-//            GLES32.glPolygonMode(GLES32.GL_FRONT_AND_BACK, GLES32.GL_LINE);
             GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, lColor, 0);
             GLES32.glLineWidth(0.01f);
-            GLES32.glDrawElements(GLES32.GL_TRIANGLES, faces.length, GLES32.GL_UNSIGNED_INT, 0);
+            GLES32.glDrawElements(GLES32.GL_LINE_LOOP, faces.length, GLES32.GL_UNSIGNED_INT, 0);
             GLES32.glLineWidth(1f);
-//            GLES32.glPolygonMode(GLES32.GL_FRONT_AND_BACK, GLES32.GL_FILL);
         }
 
         // Draw solid triangles
@@ -230,7 +245,6 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         if(updateGL) loadSortedEBO();
 
         // Draw triangles
-//        GLES32.glDepthMask(false);
         GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
         GLES32.glEnable(GLES32.GL_BLEND);
         GLES32.glEnable(GLES32.GL_CULL_FACE);
@@ -245,23 +259,22 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         GLES32.glDisable(GLES32.GL_POLYGON_OFFSET_FILL);
         GLES32.glDisable(GLES32.GL_BLEND);
         GLES32.glDisable(GLES32.GL_CULL_FACE);
-//        GLES32.glDepthMask(true);
     }
 
 
     private void calculateTriangleCentroid() {
-        triangleCentroid = new float[faces.length];
-        eyeToTriangleCentroid = new float[faces.length/3];
+        triangleCentroid = new float[(faces.length/4)*3];
+        eyeToTriangleCentroid = new float[faces.length/4];
 
         // This part did not work as intended. Made the mesh till and lose some triangles when drawing (not being drawn)
 //        sortedTriangleIndexes = new int[faces.length/3];
 //        for (int i=0; i<sortedTriangleIndexes.length; i++)
 //            sortedTriangleIndexes[i] = i;
 
-        for (int i=0; i<faces.length; i+=3) {
-            triangleCentroid[ i ] = (vertex[ 3*faces[i] ] + vertex[ 3*faces[i+1] ] + vertex[ 3*faces[i+2] ])/3;
-            triangleCentroid[i+1] = (vertex[3*faces[i]+1] + vertex[3*faces[i+1]+1] + vertex[3*faces[i+2]+1])/3;
-            triangleCentroid[i+2] = (vertex[3*faces[i]+2] + vertex[3*faces[i+1]+2] + vertex[3*faces[i+2]+2])/3;
+        for (int i=0; i<faces.length/4; i++) {
+            triangleCentroid[ i*3 ] = (vertex[ 3*faces[i*4] ] + vertex[ 3*faces[i*4+1] ] + vertex[3*faces[i*4+2]  ])/3;
+            triangleCentroid[i*3+1] = (vertex[3*faces[i*4]+1] + vertex[3*faces[i*4+1]+1] + vertex[3*faces[i*4+2]+1])/3;
+            triangleCentroid[i*3+2] = (vertex[3*faces[i*4]+2] + vertex[3*faces[i*4+1]+2] + vertex[3*faces[i*4+2]+2])/3;
         }
     }
 
@@ -342,7 +355,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     private void loadSortedEBO() {
         IntBuffer intBuffer = IntBuffer.allocate(faces.length);
         for (int i=sortedTriangleIndexes.length-1; i>=0; i--)
-            intBuffer.put(faces, sortedTriangleIndexes[i]*3,3);
+            intBuffer.put(faces, sortedTriangleIndexes[i]*4,4);
+
         intBuffer.rewind();
 
         GLES32.glBufferSubData(GLES32.GL_ELEMENT_ARRAY_BUFFER, 0, 4*faces.length, intBuffer);
@@ -355,9 +369,29 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     }
 
 
-    public void setColor(float r, float g, float b) {
+    public void setTriangleColor(float r, float g, float b) {
         tColor[0] = r;
         tColor[1] = g;
         tColor[2] = b;
+    }
+
+
+    public void setDrawLines(boolean newDrawLines) { drawLines = newDrawLines; }
+
+
+    public void setLinesColor(float r, float g, float b) {
+        lColor[0] = r;
+        lColor[1] = g;
+        lColor[2] = b;
+    }
+
+
+    public void setDrawPoints(boolean newDrawPoints) { drawPoints = newDrawPoints; }
+
+
+    public void setPointsColor(float r, float g, float b) {
+        pColor[0] = r;
+        pColor[1] = g;
+        pColor[2] = b;
     }
 }

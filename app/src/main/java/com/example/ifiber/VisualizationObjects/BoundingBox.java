@@ -204,4 +204,7 @@ public class BoundingBox extends BaseVisualization {
 
         return shaderReturn;
     }
+
+
+    public void setDraw(boolean newDraw) { draw = newDraw; }
 }

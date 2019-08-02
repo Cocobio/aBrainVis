@@ -165,4 +165,10 @@ public class BaseVisualization{
         Matrix.setIdentityM(translateMat, 0);
         Matrix.setIdentityM(scaleMat, 0);
     }
+
+
+    public void setDraw(boolean newDraw) { draw = newDraw; }
+
+
+    public void setDrawBB(boolean newDrawBB) { drawBB = newDrawBB; }
 }
