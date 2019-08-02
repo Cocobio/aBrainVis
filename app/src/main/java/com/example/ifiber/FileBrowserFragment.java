@@ -107,27 +107,6 @@ public class FileBrowserFragment extends ListFragment {
                 dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                 dialog.show();
 //            }
-//            else if(file.toString().endsWith(".mesh")){
-//                AlertDialog dialog =new AlertDialog.Builder(getActivity())
-//                        .setMessage("Display " + file.getName() + "?")
-//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                ((MainActivity) getActivity()).myRenderer.createNewMesh(file.toString(),file.getName().replace(".mesh",""));
-//                                ((MainActivity) getActivity()).mGLView.requestRender();
-//                                ((MainActivity) getActivity()).fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(((MainActivity) getActivity()).FBFragment).commit();
-//                                //Intent verDatosMesh = new Intent(getActivity(), MeshActivity.class);
-//                                //verDatosMesh.putExtra("Path", file.toString());
-//                                //verDatosMesh.putExtra("Name", file.getName().replace(".mesh",""));
-//                                //startActivity(verDatosMesh);
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                            }
-//                        }).create();
-//                dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-//                dialog.show();
-//            }
         }
     }
 
