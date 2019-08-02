@@ -629,6 +629,12 @@ public class Bundle extends BaseVisualization {
     }
 
 
+    public void setDrawBB(boolean newDrawBB) {
+        drawBB = newDrawBB;
+        boundingbox.setDraw(drawBB);
+    }
+
+
     public static Shader[] shaderPrograms(Context c) {
         Shader[] shaderReturn = new Shader[1];
 

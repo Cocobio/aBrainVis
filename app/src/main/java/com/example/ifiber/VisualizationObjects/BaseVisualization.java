@@ -170,5 +170,7 @@ public class BaseVisualization{
     public void setDraw(boolean newDraw) { draw = newDraw; }
 
 
-    public void setDrawBB(boolean newDrawBB) { drawBB = newDrawBB; }
+    public void setDrawBB(boolean newDrawBB) {
+        Log.e(TAG, "setDrawBB not implemented in: "+TAG);
+    }
 }

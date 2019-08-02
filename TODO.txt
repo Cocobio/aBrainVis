@@ -14,7 +14,6 @@ EMERGENCY:
 FREEZED:
 
 DOING:
-    Boundingbox drawing function
     In MRIVolume:
         MRIDimensions from float[] to int[]
     	Same with MRISlice
@@ -22,6 +21,8 @@ DOING:
     	Get dimensions function, from float[] to int[]
 
 DONE:
+    Boundingbox drawing function
+
     Mesh
         Add lines and point visualization
         Modify triangle, lines and points color

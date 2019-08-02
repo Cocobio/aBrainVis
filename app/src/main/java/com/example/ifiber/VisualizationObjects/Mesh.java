@@ -394,4 +394,10 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         pColor[1] = g;
         pColor[2] = b;
     }
+
+
+    public void setDrawBB(boolean newDrawBB) {
+        drawBB = newDrawBB;
+        boundingbox.setDraw(drawBB);
+    }
 }

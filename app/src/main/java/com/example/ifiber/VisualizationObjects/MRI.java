@@ -236,4 +236,10 @@ public class MRI extends BaseVisualization {
         for (int i=0; i<MRIDimension.length; i++)
             placeHolder[offset+i] = MRIDimension[i];
     }
+
+
+    public void setDrawBB(boolean newDrawBB) {
+        drawBB = newDrawBB;
+        boundingbox.setDraw(drawBB);
+    }
 }
