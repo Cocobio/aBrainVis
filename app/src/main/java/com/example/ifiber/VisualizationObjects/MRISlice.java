@@ -19,7 +19,7 @@ public class MRISlice extends BaseVisualization {
     private String fileName;
 
     private float[] scaleModel = new float[16];
-    private float[] MRIDimension = new float[4];
+    private int[] MRIDimension = new int[4];
     private int[] hMRITexture;
 
     private float[] normalPlane = new float[3];

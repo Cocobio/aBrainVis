@@ -14,13 +14,14 @@ EMERGENCY:
 FREEZED:
 
 DOING:
+
+DONE:
     In MRIVolume:
         MRIDimensions from float[] to int[]
     	Same with MRISlice
     MRI
     	Get dimensions function, from float[] to int[]
-
-DONE:
+    	
     Boundingbox drawing function
 
     Mesh

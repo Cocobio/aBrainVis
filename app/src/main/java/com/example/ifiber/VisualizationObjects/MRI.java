@@ -232,7 +232,7 @@ public class MRI extends BaseVisualization {
     }
 
 
-    public void getMRIDimension(float[] placeHolder, int offset) {
+    public void getMRIDimension(int[] placeHolder, int offset) {
         for (int i=0; i<MRIDimension.length; i++)
             placeHolder[offset+i] = MRIDimension[i];
     }

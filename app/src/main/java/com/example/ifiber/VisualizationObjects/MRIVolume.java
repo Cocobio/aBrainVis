@@ -20,7 +20,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     private String fileName;
 
     private float[] scaleModel = new float[16];
-    private float[] MRIDimension = new float[4];
+    private int[] MRIDimension = new int[4];
     private int[] hMRITexture;
 
     private float[] eye = new float[3];

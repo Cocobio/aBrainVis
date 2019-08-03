@@ -42,7 +42,7 @@ public class MRI_settings extends Fragment {
         sliceX.setPadding(0,0,0,0);
         sliceY.setPadding(0,0,0,0);
         sliceZ.setPadding(0,0,0,0);
-             final float[] dim = new float[4];
+             final int[] dim = new int[4];
             MRI mri = (MRI)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"MRI");
 
         mri.getMRIDimension(dim,0);
@@ -66,7 +66,7 @@ public class MRI_settings extends Fragment {
             SB_arr[i].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    MRI_arr[finalI].setSlicePosition(progress/dim[finalI]);
+                    MRI_arr[finalI].setSlicePosition(((float)progress)/dim[finalI]);
                     ((MainActivity) getActivity()).mGLView.requestRender();
                 }
                 @Override
