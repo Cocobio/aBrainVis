@@ -12,9 +12,6 @@ public class Camera {
     private float[] up = new float[3];
     private float scaleFactor = 1f;
 
-    float speed;
-    float zspeed;
-
 
     public Camera(float r, float sf) {
         radius = r;
@@ -44,9 +41,6 @@ public class Camera {
         up[1] = 1f;
         up[2] = 0f;
 
-        speed = 0.5f * scaleFactor;
-        zspeed = 15.0f * scaleFactor;
-
         calculateView();
     }
 
@@ -70,7 +64,7 @@ public class Camera {
 
 
     public void panning(float dx, float dy) {
-        float[] vector = {-dx*speed, dy*speed, 0f, 1f};
+        float[] vector = {-dx * scaleFactor, dy * scaleFactor, 0f, 1f};
         Quaternion.rotate3V(vector,0, rotation,0);
         for (int i = 0; i < 3; i++) center[i] += vector[i];
 
@@ -101,26 +95,6 @@ public class Camera {
         vector[offset+2] = 0;
 
         Quaternion.rotate3V(vector, offset, rotation,0);
-    }
-
-
-    public void zooming(float zoom) {
-        if (zoom > 0) radius -= zspeed;
-        else if (zoom < 0) radius += zspeed;
-
-        if (radius < 1f) radius = 1f;
-
-        calculateView();
-    }
-
-
-    public void changeRotationSpeed(float s) {
-        speed = s * scaleFactor;
-    }
-
-
-    public void changeZoomSpeed(float s) {
-        zspeed = s * scaleFactor;
     }
 
 
@@ -211,4 +185,7 @@ public class Camera {
 
         return currentEye;
     }
+
+
+    public float getRadius() {return radius;}
 }

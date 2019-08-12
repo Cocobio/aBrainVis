@@ -47,6 +47,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Map<VisualizationType, Shader[]> shaderChain = new HashMap<>();
     private Shader[] coordinateSystemShader;
     private Camera camera;
+    static final private float FOV_DEFAULT_VALUE = 45.0f;
+    static final private float FOV_FLOOR_LIMITER = 1.0f;
+    static final private float FOV_CEIL_LIMITER = 150.f;
+    private float fov = FOV_DEFAULT_VALUE;
     private Vector<Shader> lightShader = new Vector<>();
 
     private float[] clearColor = new float[4];
@@ -128,7 +132,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         coordinateHeight = height/5;
         coordinateWidth = coordinateHeight;
 
-        Matrix.perspectiveM(projectionMatrix, 0, 45.0f, (float)(width)/(float)(height), 0.01f, 10000f);
+        Matrix.perspectiveM(projectionMatrix, 0, fov, (float)(width)/(float)(height), 0.01f, 10000f);
         Matrix.perspectiveM(coordinateProjectionMatrix,0,45f, (float)(coordinateWidth)/(float)(coordinateHeight), 0.01f, 10f);
         configPerspective();
     }
@@ -136,6 +140,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
+        configPerspective();
         GLES32.glViewport(0, 0, surfaceWidth, surfaceHeight);
         configView();
         configCoordinateView();
@@ -334,21 +339,34 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 
     public void panCam(float dx, float dy) {
-        camera.panning(dx, dy);
+        float r = camera.getRadius();
+        float panningX = (float)(dx/surfaceHeight*2*r*Math.tan(Math.toRadians(fov/2)));
+        float panningY = (float)(dy/surfaceHeight*2*r*Math.tan(Math.toRadians(fov/2)));
+
+        camera.panning(panningX, panningY);
         camera.getView(viewMatrix);
+
         notifyObjectsBasedInCameraUpdate();
     }
 
 
     public void zoomCam(float delta) {
-        camera.zooming(-delta);
-        camera.getView(viewMatrix);
-        notifyObjectsBasedInCameraUpdate();
+        float r = camera.getRadius();
+        fov = (float) Math.toDegrees(2 * Math.atan((2 * r * Math.tan(Math.toRadians(fov) / 2) * (delta / surfaceHeight + 1)) / (2 * r)));
+
+        if (fov < FOV_FLOOR_LIMITER) fov = FOV_FLOOR_LIMITER;
+        else if (fov > FOV_CEIL_LIMITER) fov = FOV_CEIL_LIMITER;
+        Matrix.perspectiveM(projectionMatrix, 0, fov, (float)(surfaceWidth)/(float)(surfaceHeight), 0.01f, 10000f);
+
+//        notifyObjectsBasedInCameraUpdate();
     }
 
 
     public void ResetCamera() {
         camera.defaultValues();
+        fov = FOV_DEFAULT_VALUE;
+        Matrix.perspectiveM(projectionMatrix, 0, fov, (float)(surfaceWidth)/(float)(surfaceHeight), 0.01f, 10000f);
+//        configPerspective();
 
         camera.getView(viewMatrix);
         camera.getViewOfOrientationWithRadius(coordinateViewMatrix, csRadius);

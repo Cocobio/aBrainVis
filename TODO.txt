@@ -1,27 +1,30 @@
 TODO:
-    MRI
-    	Settings working with multiples images
     Bundle visualization segment using EBO, for percentage and selected Bundles
     Mesh
         GUI for interaction with Mesh object
     MRI Slice
         GUI for interaction with Slice object
     GUI for boundingbox drawing
-    Fix apk install failure
 
 EMERGENCY:
 
 FREEZED:
+    After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
 
 DOING:
+    Fix apk install failure
+    MRI
+    	Settings working with multiples images
 
 DONE:
+    Fix zoom speed and pan speed
+
     In MRIVolume:
         MRIDimensions from float[] to int[]
     	Same with MRISlice
     MRI
     	Get dimensions function, from float[] to int[]
-    	
+
     Boundingbox drawing function
 
     Mesh
