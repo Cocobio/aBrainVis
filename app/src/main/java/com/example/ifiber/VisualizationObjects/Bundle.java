@@ -129,17 +129,19 @@ public class Bundle extends BaseVisualization {
                 if (br != null)
                     br.close();
             } catch (IOException ex) {
+                Log.e(TAG, "Error at closing file "+fileName+" : " + ex.toString());
                 ex.printStackTrace();
             }
         }
 
-        String[] tmp=bundles.split(" ");
-        bundlesName = new String[(tmp.length-7)/2];
-        bundlesStart = new int[(tmp.length-7)/2+1];
+        String[] tmp=bundles.substring(bundles.indexOf('[')+1,bundles.lastIndexOf(']')).split(" ");
+
+        bundlesName = new String[(tmp.length)/2];
+        bundlesStart = new int[(tmp.length)/2+1];
 
         for(int i=7;i<tmp.length-1;i+=2) {
-            bundlesName[(i-7)/2] = tmp[i].replace(",","");
-            bundlesStart[(i-7)/2] = Integer.parseInt(tmp[i+1].replace(",",""));
+            bundlesName[i/2] = tmp[i].replace(",","");
+            bundlesStart[i/2] = Integer.parseInt(tmp[i+1].replace(",",""));
         }
 
         bundlesStart[bundlesStart.length-1] = curvesCount;

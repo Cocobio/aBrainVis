@@ -1,20 +1,27 @@
 TODO:
-    Bundle visualization segment using EBO, for percentage and selected Bundles
-    Mesh
-        GUI for interaction with Mesh object
     MRI Slice
         GUI for interaction with Slice object
-    GUI for boundingbox drawing
+    Zoom and Pan with 2 fingers... and rotation (transverse from the view)
+    Allow app to work in fullscreen  through code
+    Mesh
+        Add support for GIFTI
 
 EMERGENCY:
+    Bundle visualization segment using EBO, for percentage and selected Bundles
+    Mesh
+        GUI for interaction with Mesh object, lines and opacity
+    GUI for boundingbox drawing
 
 FREEZED:
     After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
 
 DOING:
-    Fix apk install failure
     MRI
-    	Settings working with multiples images
+    	Settings working with multiples MRIs
+
+Testing if DONE:
+    Fix apk install failure
+        - changed the android manifest to install only 1 app.
 
 DONE:
     Fix zoom speed and pan speed
