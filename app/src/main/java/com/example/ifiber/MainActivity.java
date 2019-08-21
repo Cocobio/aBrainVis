@@ -78,6 +78,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BLFragment).commit();
                     if(FLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
+                    if(MRI_settginsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
 
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FBFragment).commit();
                     }
@@ -99,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                     if(FLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
                     if(MRI_settginsFragment.isAdded())
-                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
                 break;
             case 4:
                 myRenderer.ResetCamera();
@@ -111,18 +113,32 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FBFragment).commit();
                     if(BLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BLFragment).commit();
+                    if(MRI_settginsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
 
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FLFragment).commit();
                 }
                 break;
+            case 6:
+                myRenderer.toggleBoundingBoxes();
+                mGLView.requestRender();
+                break;
         }
     }
 
-    void startMRI_settings(String fileName){
+    void startMRI_settings(String fileName) {
         MRI_fileSettings = fileName;
         if(FLFragment.isAdded())
             fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, MRI_settginsFragment).commit();
+    }
+
+
+    void startMESH_settings(String fileName) {
+//        MESH_fileSettings = fileName;
+//        if(FLFragment.isAdded())
+//            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
+//        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, MESH_settginsFragment).commit();
     }
 
     @Override

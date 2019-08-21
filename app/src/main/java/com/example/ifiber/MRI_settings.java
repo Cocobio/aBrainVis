@@ -21,6 +21,7 @@ public class MRI_settings extends Fragment {
 
     public SeekBar sliceX, sliceY, sliceZ;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_mri_settings, container,false);

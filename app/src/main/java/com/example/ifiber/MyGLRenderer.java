@@ -73,6 +73,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] coordinateProjectionMatrix = new float[16];
 
     private float csRadius = (float)(1/Math.sin(Math.toRadians(22.5)));
+    private boolean bbDefaultState = true;
 
     public final ArrayList<BaseVisualization> sceneTree = new ArrayList<>();
     public final ArrayList<CameraBasedVisualizations> cameraBasedObjects = new ArrayList<>();
@@ -287,12 +288,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         if (Bundle.validFileExtensions.contains(extension)){
             Bundle bundle  = new Bundle(shaderChain, filePath);
+            bundle.setDrawBB(bbDefaultState);
             sceneTree.add(bundle);
             DisplayedFiles.add(filePath);
             listDisplayedObjects.put(filePath,bundle);
         }
         if (Mesh.validFileExtensions.contains(extension)) {
             Mesh mesh = new Mesh(shaderChain, filePath);
+            mesh.setDrawBB(bbDefaultState);
             sceneTree.add(mesh);
             DisplayedFiles.add(filePath);
             cameraBasedObjects.add(mesh);
@@ -302,12 +305,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         if (MRI.validFileExtensions.contains(extension)) {
             MRI mri = new MRI(shaderChain, filePath);
+            mri.setDrawBB(bbDefaultState);
             sceneTree.add(mri);
             DisplayedFiles.add(filePath);
             listDisplayedObjects.put(filePath+"MRI",mri);
+
             // Testing MRIVolume
             MRIVolume mriVol = new MRIVolume(shaderChain, mri);
             mriVol.setDraw(false);
+            mriVol.setDrawBB(bbDefaultState);
             sceneTree.add(mriVol);
             cameraBasedObjects.add(mriVol);
             listDisplayedObjects.put(filePath+"vol",mriVol);
@@ -320,6 +326,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             mriSliceY.setAxis(0,1,0);
             MRISlice mriSliceZ = new MRISlice(shaderChain, mri);
             mriSliceX.setAxis(0,0,1);
+
+            mriSliceX.setDrawBB(bbDefaultState);
+            mriSliceY.setDrawBB(bbDefaultState);
+            mriSliceZ.setDrawBB(bbDefaultState);
+
             sceneTree.add(mriSliceX);
             sceneTree.add(mriSliceY);
             sceneTree.add(mriSliceZ);
@@ -371,6 +382,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         camera.getView(viewMatrix);
         camera.getViewOfOrientationWithRadius(coordinateViewMatrix, csRadius);
         notifyObjectsBasedInCameraUpdate();
+    }
+
+
+    public void toggleBoundingBoxes() {
+        bbDefaultState = !bbDefaultState;
+
+        for (BaseVisualization obj : sceneTree)
+            obj.setDrawBB(bbDefaultState);
     }
 
 
