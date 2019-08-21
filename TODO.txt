@@ -12,19 +12,24 @@ EMERGENCY:
         GUI for interaction with Mesh object, lines and opacity
     GUI for boundingbox drawing
 
-FREEZED:
-    After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
-
 DOING:
-    MRI
-    	Settings working with multiples MRIs
 
 Testing if DONE:
     Fix apk install failure
         - changed the android manifest to install only 1 app.
 
+PATCHES TO BE FIXED:
+    After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
+
+    MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
+
 DONE:
-    Fix zoom speed and pan speed
+    MRI
+    	Settings working with multiples MRIs
+
+    Fixed minor bug in bundle class, some files were not loading
+
+    Fixed zoom speed and pan speed
 
     In MRIVolume:
         MRIDimensions from float[] to int[]

@@ -204,8 +204,8 @@ public class MRISlice extends BaseVisualization {
     }
 
     public void setSlicePosition(float newPosition) {
-        if (newPosition>1f) newPosition = 1f;
-        else if (newPosition<0f) newPosition = 0f;
+        if (newPosition>1f-0.0001f) newPosition = 1f-0.0001f;
+        else if (newPosition<0.0001f) newPosition = 0.0001f;
 
         slicePosition = newPosition;
 
