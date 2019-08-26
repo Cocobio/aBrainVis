@@ -63,7 +63,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mGLView = new MyGLSurfaceView(this,myRenderer);
         GLcontainer=(FrameLayout)findViewById(R.id.c1);
         GLcontainer.addView(mGLView);
-        Log.d("MainActivity", "----------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     @Override
