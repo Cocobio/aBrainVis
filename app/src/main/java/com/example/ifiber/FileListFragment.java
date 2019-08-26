@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.ifiber.VisualizationObjects.MRI;
+import com.example.ifiber.VisualizationObjects.Mesh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,9 +106,14 @@ public class FileListFragment extends ListFragment {
                         for(int i=0;i< DisplayFiles.length;i++ ){
                             if (DisplayFiles[i]){
                                 String fileName = files.get(i);
-                                if (fileName.endsWith(".nii") || fileName.endsWith(".nii.gz"))
-                                    ((MainActivity) getActivity()).startMRI_settings(fileName);
+                                String extension = fileName.substring(fileName.lastIndexOf('.')+1);
 
+                                if (MRI.validFileExtensions.contains(extension))
+                                    ((MainActivity) getActivity()).startMRI_settings(fileName);
+                                else if (com.example.ifiber.VisualizationObjects.Bundle.validFileExtensions.contains(extension))
+                                    ((MainActivity) getActivity()).startBUNDLE_settings(fileName);
+                                else if (Mesh.validFileExtensions.contains(extension))
+                                    ((MainActivity) getActivity()).startMESH_settings(fileName);
                             }
                         }
                     }

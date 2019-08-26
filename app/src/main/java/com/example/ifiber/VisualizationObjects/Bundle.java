@@ -20,6 +20,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Vector;
 
 public class Bundle extends BaseVisualization {
     public static ArrayList<String> validFileExtensions =  new ArrayList<>(Arrays.asList("bundles", "tck", "trk"));
@@ -43,6 +44,14 @@ public class Bundle extends BaseVisualization {
     protected int[] hColorTableTexture = null;
 
     protected BoundingBox boundingbox;
+
+    // In place segmentation bundle implementation
+    private boolean[] selectedBundles;
+    private int percentage = 100;
+    private boolean updateEBOFlag = false;
+    private int elementLength;
+    /////////////////////////////////////////////
+
 
 
     public Bundle(Map<VisualizationType, Shader[]> shaderChain, String file) {
@@ -75,6 +84,8 @@ public class Bundle extends BaseVisualization {
 
 
     public void loadOpenGLVariables(){
+        if (updateEBOFlag)
+            updateEBO();
         if (openGLLoaded)
             return;
         loadColorTexture();
@@ -134,14 +145,19 @@ public class Bundle extends BaseVisualization {
             }
         }
 
-        String[] tmp=bundles.substring(bundles.indexOf('[')+1,bundles.lastIndexOf(']')).split(" ");
+        String[] tmp=bundles.substring(bundles.indexOf('[')+1,bundles.lastIndexOf(']')).replace(" ", "").split(",");
 
         bundlesName = new String[(tmp.length)/2];
         bundlesStart = new int[(tmp.length)/2+1];
 
-        for(int i=7;i<tmp.length-1;i+=2) {
-            bundlesName[i/2] = tmp[i].replace(",","");
-            bundlesStart[i/2] = Integer.parseInt(tmp[i+1].replace(",",""));
+        // In place segmentation bundle implementation
+        selectedBundles = new boolean[(tmp.length)/2];
+        for (int i=0; i<selectedBundles.length; i++) selectedBundles[i] = true;
+        //////////////////////////////////////////////
+
+        for(int i=0;i<tmp.length-1;i+=2) {
+            bundlesName[i/2] = tmp[i];
+            bundlesStart[i/2] = Integer.parseInt(tmp[i+1]);
         }
 
         bundlesStart[bundlesStart.length-1] = curvesCount;
@@ -166,6 +182,7 @@ public class Bundle extends BaseVisualization {
             int elementLength = vertexSize/3 + curvesCount;
 
             element = new int[elementLength];
+            this.elementLength = element.length;
 
             buf_in.order(ByteOrder.LITTLE_ENDIAN);
             buf_in.clear();
@@ -286,6 +303,11 @@ public class Bundle extends BaseVisualization {
             bundlesStart[0] = 0;
             bundlesStart[1] = curvesCount;
 
+            // In place segmentation bundle implementation
+            selectedBundles = new boolean[1];
+            selectedBundles[0] = true;
+            //////////////////////////////////////////////
+
             inChannel.close();
         } catch (IOException ex) {
             Log.e(TAG, "Error at reading file "+fileName+" : " + ex.toString());
@@ -313,6 +335,7 @@ public class Bundle extends BaseVisualization {
             int elementLength = vertexSize/3 + curvesCount;
 
             element = new int[elementLength];
+            this.elementLength = element.length;
 
             if (trkLittleEndian) buf_in.order(ByteOrder.LITTLE_ENDIAN);
             else buf_in.order(ByteOrder.BIG_ENDIAN);
@@ -530,7 +553,7 @@ public class Bundle extends BaseVisualization {
         GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
         GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, hColorTableTexture[0]);
 
-        GLES32.glDrawElements(GLES32.GL_LINE_STRIP, element.length, GLES32.GL_UNSIGNED_INT, 0);
+        GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
 
         boundingbox.drawSolid();
     }
@@ -635,6 +658,70 @@ public class Bundle extends BaseVisualization {
         drawBB = newDrawBB;
         boundingbox.setDraw(drawBB);
     }
+
+
+    public String getFileName() { return fileName; }
+
+
+    public Vector<String> getBundlesNames() { return new Vector<String>(Arrays.asList(bundlesName)); }
+
+
+    // In place segmentation bundle implementation
+    private void updateEBO() {
+        // VAO
+        GLES32.glBindVertexArray(vao[0]);
+
+        IntBuffer intBuffer = IntBuffer.wrap(element,0,elementLength);
+        intBuffer.rewind();
+
+        GLES32.glBufferData(GLES32.GL_ELEMENT_ARRAY_BUFFER, 4*elementLength, intBuffer, GLES32.GL_STATIC_DRAW);
+    }
+
+
+    private void createNewEBO() {
+        int j, index=0, fw_iterator=0, bw_iterator=element.length;
+        float step=100.0f/percentage;
+
+        for (int i=0; i<selectedBundles.length; i++) {
+            if (selectedBundles[i])
+                for (j = 0; step *j < bundlesStart[i + 1] - bundlesStart[i]; j++) {
+                    for (int k = 0; k < fiberSizes[bundlesStart[i] + ((int) (step * j))]; k++)
+                        element[fw_iterator++] = index++;
+                    element[fw_iterator++] = -1;
+
+                    for (int k = ((int) (step * j)) + bundlesStart[i] + 1; k < Math.min(((int)(step * (j + 1))) + bundlesStart[i], bundlesStart[i + 1]); k++)
+                        index += fiberSizes[k];
+                }
+            else
+                for (int k=bundlesStart[i]; k<bundlesStart[i+1]; k++) index += fiberSizes[k];
+        }
+
+        elementLength = fw_iterator;
+        updateEBOFlag = true;
+    }
+
+
+    public void getSelectedBundles(boolean[] container, int offset) {
+        for (int i=0; i<selectedBundles.length; i++)
+            container[offset+i] = selectedBundles[i];
+    }
+
+
+    public void setSelectedBundles(boolean[] container, int offset) {
+        for (int i=0; i<selectedBundles.length; i++)
+            selectedBundles[i] = container[offset+i];
+        createNewEBO();
+    }
+
+
+    public int getPercentage() { return percentage; }
+
+
+    public void setPercentage(int newPercentage) {
+        percentage = newPercentage;
+        createNewEBO();
+    }
+    //////////////////////////////////////////////
 
 
     public static Shader[] shaderPrograms(Context c) {

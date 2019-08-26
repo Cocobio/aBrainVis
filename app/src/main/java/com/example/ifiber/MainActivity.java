@@ -1,21 +1,12 @@
 package com.example.ifiber;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.FragmentTransaction;
 import android.opengl.GLSurfaceView;
-import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.FrameLayout;
 
@@ -28,8 +19,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     public FileBrowserFragment FBFragment;
     public BundleListFragment BLFragment;
     public FileListFragment FLFragment;
-    public MRI_settings MRI_settginsFragment;
+
+    public MRI_settings MRI_settingsFragment;
+    public Bundle_settings BUNDLE_settingsFragment;
+
     public String MRI_fileSettings;
+    public String BUNDLE_fileSettings;
+
     FragmentManager fragmentManager = getSupportFragmentManager();
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -50,7 +46,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         FBFragment=new FileBrowserFragment();
         BLFragment=new BundleListFragment();
         FLFragment = new FileListFragment();
-        MRI_settginsFragment = new MRI_settings();
+
+        // Setting fragments
+        MRI_settingsFragment = new MRI_settings();
+        BUNDLE_settingsFragment = new Bundle_settings();
 
         FragmentContainer=(FrameLayout)findViewById(R.id.c2);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -78,18 +77,20 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BLFragment).commit();
                     if(FLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
-                    if(MRI_settginsFragment.isAdded())
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
+                    if(MRI_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settingsFragment).commit();
+                    if(BUNDLE_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BUNDLE_settingsFragment).commit();
 
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FBFragment).commit();
                     }
                 break;
             case 2:
-                if(!BLFragment.isAdded()){
-                    if(FBFragment.isAdded())
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FBFragment).commit();
-                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, BLFragment).commit();
-                    }
+//                if(!BLFragment.isAdded()){
+//                    if(FBFragment.isAdded())
+//                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FBFragment).commit();
+//                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, BLFragment).commit();
+//                    }
                 break;
             case 3:
                     if (IlumFragment.isAdded())
@@ -100,8 +101,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BLFragment).commit();
                     if(FLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
-                    if(MRI_settginsFragment.isAdded())
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
+                    if(MRI_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settingsFragment).commit();
+                    if(BUNDLE_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BUNDLE_settingsFragment).commit();
                 break;
             case 4:
                 myRenderer.ResetCamera();
@@ -113,8 +116,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FBFragment).commit();
                     if(BLFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BLFragment).commit();
-                    if(MRI_settginsFragment.isAdded())
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settginsFragment).commit();
+                    if(MRI_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MRI_settingsFragment).commit();
+                    if(BUNDLE_settingsFragment.isAdded())
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(BUNDLE_settingsFragment).commit();
 
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FLFragment).commit();
                 }
@@ -130,7 +135,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         MRI_fileSettings = fileName;
         if(FLFragment.isAdded())
             fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
-        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, MRI_settginsFragment).commit();
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, MRI_settingsFragment).commit();
     }
 
 
@@ -139,6 +144,14 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 //        if(FLFragment.isAdded())
 //            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
 //        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, MESH_settginsFragment).commit();
+    }
+
+
+    void startBUNDLE_settings(String fileName) {
+        BUNDLE_fileSettings = fileName;
+        if(FLFragment.isAdded())
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(FLFragment).commit();
+        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, BUNDLE_settingsFragment).commit();
     }
 
     @Override

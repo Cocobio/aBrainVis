@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All"
-                android:id="@+id/delete_button" />
+                android:id="@+id/selectall_button" />
 
             <Button
                 android:layout_width="wrap_content"

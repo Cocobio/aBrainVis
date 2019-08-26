@@ -28,6 +28,7 @@ public class BundleListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_bundle_list, container,false);
 
+        String bundleFile = ((MainActivity) getActivity()).BUNDLE_fileSettings;
         FileName = (TextView)view.findViewById(R.id.FileText);
         item = new ArrayList<String>();
 
