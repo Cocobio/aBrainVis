@@ -3,9 +3,8 @@ package com.example.ifiber.VisualizationObjects;
 import android.content.Context;
 import android.opengl.GLES32;
 import android.opengl.Matrix;
-import android.util.Log;
 
-import com.example.ifiber.Shader;
+import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.VisualizationType;
 
 import java.nio.FloatBuffer;

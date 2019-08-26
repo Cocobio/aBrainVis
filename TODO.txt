@@ -25,6 +25,8 @@ PATCHES TO BE FIXED:
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Fixed bug on MRI Volume, visualization was drawing even when draw was on false
+
     Bundle visualization segment using EBO, for percentage and selected Bundles **** in place segmentation implemented in bundle class ****
 
     GUI for boundingbox drawing

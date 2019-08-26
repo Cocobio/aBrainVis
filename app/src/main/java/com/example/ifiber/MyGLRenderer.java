@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.VisualizationType;
 import com.example.ifiber.Tools.Camera;
 import com.example.ifiber.VisualizationObjects.BaseVisualization;
@@ -397,6 +398,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         for (CameraBasedVisualizations obj : cameraBasedObjects) {
             obj.updateCameraEye(camera.getEye(),0);
         }
+    }
+
+
+    public HashMap getListDisplayedObjects() {
+        return listDisplayedObjects;
     }
 
 

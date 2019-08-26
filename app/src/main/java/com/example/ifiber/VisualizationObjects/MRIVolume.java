@@ -5,7 +5,7 @@ import android.opengl.GLES32;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import com.example.ifiber.Shader;
+import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.OtsuThresholding;
 import com.example.ifiber.Tools.VisualizationType;
 
@@ -240,7 +240,8 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
     @Override
     public void drawSolid() {
-        if (!draw) return;
+        if (!draw || alpha!=1f) return;
+        Log.e(TAG, "solid draw: "+draw);
         configGL();
 
         if (alpha == 1f) {
@@ -256,7 +257,8 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
     @Override
     public void drawTransparent() {
-        if (!draw && alpha!=1f) return;
+        if (!draw || alpha==1f) return;
+        Log.e(TAG, "transparent draw: "+draw);
         configGL();
 
         GLES32.glEnable(GLES32.GL_BLEND);

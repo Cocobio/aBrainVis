@@ -1,9 +1,8 @@
-package com.example.ifiber;
+package com.example.ifiber.Controllers;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
 
+import com.example.ifiber.MainActivity;
+import com.example.ifiber.R;
 import com.example.ifiber.VisualizationObjects.MRI;
 import com.example.ifiber.VisualizationObjects.MRISlice;
 import com.example.ifiber.VisualizationObjects.MRIVolume;
@@ -35,13 +36,13 @@ public class MRI_settings extends Fragment {
         sliceZ.setPadding(0,0,0,0);
 
         final int[] dim = new int[4];
-        MRI mri = (MRI)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"MRI");
+        MRI mri = (MRI)((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(mriFile+"MRI");
 
         mri.getMRIDimension(dim,0);
-        final MRISlice x = (MRISlice)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"X");
-        final MRISlice y = (MRISlice)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"Y");
-        final MRISlice z = (MRISlice)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"Z");
-        final MRIVolume vol = (MRIVolume)((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(mriFile+"vol");
+        final MRISlice x = (MRISlice)((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(mriFile+"X");
+        final MRISlice y = (MRISlice)((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(mriFile+"Y");
+        final MRISlice z = (MRISlice)((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(mriFile+"Z");
+        final MRIVolume vol = (MRIVolume)((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(mriFile+"vol");
 
         int sX = (int)(x.getSlicePosition()*dim[0]);
         sliceX.setMax(dim[0]);

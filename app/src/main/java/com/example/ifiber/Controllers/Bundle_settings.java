@@ -1,9 +1,8 @@
-package com.example.ifiber;
+package com.example.ifiber.Controllers;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,10 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.example.ifiber.MainActivity;
+import com.example.ifiber.MyBundleListArrayAdapter;
+import com.example.ifiber.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +38,7 @@ public class Bundle_settings extends ListFragment {
         FileName = (TextView)view.findViewById(R.id.FileText);
         item = new ArrayList<String>();
 
-        bundle = (com.example.ifiber.VisualizationObjects.Bundle) ((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(bundleFile);
+        bundle = (com.example.ifiber.VisualizationObjects.Bundle) ((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(bundleFile);
         FileName.setText(bundle.getFileName());
 
         final Vector<String> bundlesNames = bundle.getBundlesNames();

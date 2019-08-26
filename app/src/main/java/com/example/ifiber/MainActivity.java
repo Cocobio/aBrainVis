@@ -10,6 +10,9 @@ import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.FrameLayout;
 
+import com.example.ifiber.Controllers.Bundle_settings;
+import com.example.ifiber.Controllers.MRI_settings;
+
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     public GLSurfaceView mGLView;
