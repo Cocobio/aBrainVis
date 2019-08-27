@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 public class IlluminationFragment extends Fragment {
-    private static final int [] seekarID={R.id.red,R.id.green,R.id.blue,R.id.ilum1,R.id.ilum2,R.id.ilum3,R.id.ilum4,R.id.ilum5,R.id.ilum6,R.id.ilum7,R.id.red_mesh,R.id.green_mesh,R.id.blue_mesh,R.id.alpha};
-    public static SeekBar[] Colors = new SeekBar[14];
-    private float divider[]={255f,255f,255f,100f,100f,100f,100f,100f,100f,20f,255f,255f,255f,100f};
+    private static final int [] seekarID={R.id.red,R.id.green,R.id.blue,R.id.ilum1,R.id.ilum2,R.id.ilum3,R.id.ilum4,R.id.ilum5,R.id.ilum6,R.id.ilum7};
+    public static SeekBar[] Colors = new SeekBar[10];
+    private float divider[]={255f,255f,255f,100f,100f,100f,100f,100f,100f,20f};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

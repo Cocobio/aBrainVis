@@ -1,39 +1,28 @@
 package com.example.ifiber;
 
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ifiber.VisualizationObjects.MRI;
 import com.example.ifiber.VisualizationObjects.Mesh;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 public class FileListFragment extends ListFragment {
-
-    private List<String> item = null;
-    private TextView FileName;
     public boolean DisplayFiles[];
     MyFilesListArrayAdapter fileList;
     List<String> files;
-    int percentage;
-    public SeekBar percent;
 
 
     void refresh(){
@@ -50,8 +39,7 @@ public class FileListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_files_list, container,false);
 
-        FileName = (TextView)view.findViewById(R.id.FileText);
-        item = new ArrayList<String>();
+
         files = ((MainActivity)getActivity()).myRenderer.DisplayedFiles;
         DisplayFiles =  new boolean[files.size()];
         fileList = new MyFilesListArrayAdapter(getActivity(),files, DisplayFiles);
