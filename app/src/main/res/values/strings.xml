@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">iFiber</string>
 
-    <string name="datos_mesh">iFiber</string>
-
     <string name="title_section1">Display Settings </string>
     <string name="title_section2">Browse File</string>
-    <string name="title_section3">Bundle Names</string>
-    <string name="title_section4">Hide Settings Bar</string>
-    <string name="title_section5">Reset Camera</string>
-    <string name="title_section6">Displayed objects</string>
-    <string name="title_section7">Toggle Bounding Boxes</string>
+    <string name="title_section3">Hide Settings Bar</string>
+    <string name="title_section4">Reset Camera</string>
+    <string name="title_section5">Displayed objects</string>
+    <string name="title_section6">Toggle Bounding Boxes</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -17,4 +14,10 @@
     <string name="action_example">Example action</string>
 
     <string name="action_settings">Settings</string>
+
+    <string-array name="mesh_color_spinner">
+        <item>Mesh</item>
+        <item>Wireframe</item>
+        <item>Points</item>
+    </string-array>
 </resources>

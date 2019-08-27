@@ -40,6 +40,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     private float[] tColor = {0.7f, 0.7f, 0.7f};
     private float alpha = 0.5f;
 
+    private boolean drawTriangles = true;
     private boolean drawPoints = false;
     private boolean drawLines = false;
 
@@ -224,7 +225,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         }
 
         // Draw solid triangles
-        if (alpha == 1f) {
+        if (alpha == 1f && drawTriangles) {
             GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
             GLES32.glEnable(GLES32.GL_CULL_FACE);
 
@@ -251,6 +252,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
             loadSortedEBO();
             updateGL = false;
         }
+
+        if (!drawTriangles) return;
 
         // Draw triangles
         GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
@@ -386,6 +389,9 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     }
 
 
+    public float getAlpha() { return alpha; }
+
+
     public void setTriangleColor(float r, float g, float b) {
         tColor[0] = r;
         tColor[1] = g;
@@ -393,7 +399,19 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     }
 
 
+    public boolean getDrawTriangles() { return drawTriangles; }
+
+
+    public void setDrawTriangles(boolean newDrawTriangles) { drawTriangles = newDrawTriangles; }
+
+
+    public void getTriangleColor(float[] container, int offset) { for (int i=0; i<3; i++) container[offset+i] = tColor[i]; }
+
+
     public void setDrawLines(boolean newDrawLines) { drawLines = newDrawLines; }
+
+
+    public boolean getDrawLines() { return drawLines; }
 
 
     public void setLinesColor(float r, float g, float b) {
@@ -403,7 +421,13 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     }
 
 
+    public void getLinesColor(float[] container, int offset) { for (int i=0; i<3; i++) container[offset+i] = lColor[i]; }
+
+
     public void setDrawPoints(boolean newDrawPoints) { drawPoints = newDrawPoints; }
+
+
+    public boolean getDrawPoints() { return drawPoints; }
 
 
     public void setPointsColor(float r, float g, float b) {
@@ -413,10 +437,16 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     }
 
 
+    public void getPointsColor(float[] container, int offset) { for (int i=0; i<3; i++) container[offset+i] = pColor[i]; }
+
+
     public void setDrawBB(boolean newDrawBB) {
         drawBB = newDrawBB;
         boundingbox.setDraw(drawBB);
     }
+
+
+    public String getFileName() { return fileName; }
 
 
     public void onPause() {
