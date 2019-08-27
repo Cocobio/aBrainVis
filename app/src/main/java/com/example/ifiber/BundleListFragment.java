@@ -9,7 +9,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -26,7 +25,7 @@ public class BundleListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_bundle_list, container,false);
+        View view=inflater.inflate(R.layout.fragment_bundle_settings, container,false);
 
         String bundleFile = ((MainActivity) getActivity()).BUNDLE_fileSettings;
         FileName = (TextView)view.findViewById(R.id.FileText);

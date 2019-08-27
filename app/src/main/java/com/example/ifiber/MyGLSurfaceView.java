@@ -1,12 +1,10 @@
 package com.example.ifiber;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -22,6 +20,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         setRenderer(mRenderer);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY); // Render the view only when there is a change in the drawing data
         mActivePointers = new SparseArray<>();
+        
     }
 
     @Override

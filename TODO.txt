@@ -26,6 +26,8 @@ PATCHES TO BE FIXED:
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Rename of bundle fragment
+    
     Set OpenGL ES 3.2 as requirement.
 
     Fix onPause data been destroyed. Fixed by adding onPause to BaseVisualization, that destroys all OpenGL data and set the loading flag back to true ( openGLLoaded )

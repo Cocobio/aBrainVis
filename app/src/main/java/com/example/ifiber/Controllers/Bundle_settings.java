@@ -32,7 +32,7 @@ public class Bundle_settings extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_bundle_list, container,false);
+        View view=inflater.inflate(R.layout.fragment_bundle_settings, container,false);
 
         String bundleFile = ((MainActivity) getActivity()).BUNDLE_fileSettings;
         FileName = (TextView)view.findViewById(R.id.FileText);
