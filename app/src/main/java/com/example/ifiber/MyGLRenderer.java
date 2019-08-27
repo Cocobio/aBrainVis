@@ -47,7 +47,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private Map<VisualizationType, Shader[]> shaderChain = new HashMap<>();
     private Shader[] coordinateSystemShader;
-    private Camera camera;
+    private Camera camera = new Camera(350.0f, scaleFactor);
     static final private float FOV_DEFAULT_VALUE = 45.0f;
     static final private float FOV_FLOOR_LIMITER = 1.0f;
     static final private float FOV_CEIL_LIMITER = 150.f;
@@ -106,8 +106,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(systemScale,0);
         Matrix.scaleM(systemScale,0, scaleFactor, scaleFactor, scaleFactor);
         configSystemScale();
-
-        camera = new Camera(350.0f, scaleFactor);
 
         camera.getView(viewMatrix);
         camera.getViewOfOrientationWithRadius(coordinateViewMatrix, csRadius);
@@ -436,5 +434,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        catch (Throwable e) {
 //            System.err.println(e);
 //        }
+    }
+
+
+    public void onPause() {
+        for (BaseVisualization i : sceneTree)
+            i.onPause();
+    }
+
+
+    public void onResume() {
+//        Actualizar los shaders
     }
 }

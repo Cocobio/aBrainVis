@@ -241,15 +241,12 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     @Override
     public void drawSolid() {
         if (!draw || alpha!=1f) return;
-        Log.e(TAG, "solid draw: "+draw);
         configGL();
 
-        if (alpha == 1f) {
-            GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
-            GLES32.glBindTexture(GLES32.GL_TEXTURE_3D, hMRITexture[0]);
+        GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
+        GLES32.glBindTexture(GLES32.GL_TEXTURE_3D, hMRITexture[0]);
 
-            GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, (int)(subSamplingFactor*sliceFr));
-        }
+        GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, (int)(subSamplingFactor*sliceFr));
 
         boundingbox.drawSolid();
     }
@@ -258,7 +255,6 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     @Override
     public void drawTransparent() {
         if (!draw || alpha==1f) return;
-        Log.e(TAG, "transparent draw: "+draw);
         configGL();
 
         GLES32.glEnable(GLES32.GL_BLEND);
@@ -275,7 +271,10 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteVertexArrays(1, vao, 0);
+        if (vao != null) {
+            GLES32.glDeleteVertexArrays(1, vao, 0);
+            vao = null;
+        }
     }
 
 
@@ -412,5 +411,13 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
         loadStaticUniforms(shaderReturn[0]);
 
         return shaderReturn;
+    }
+
+
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+        boundingbox.onPause();
     }
 }

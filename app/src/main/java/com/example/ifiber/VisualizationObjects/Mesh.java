@@ -199,7 +199,11 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     public void drawSolid() {
         if(!draw) return;
         configGL();
-        if(updateGL) loadSortedEBO();
+
+        if(updateGL) {
+            loadSortedEBO();
+            updateGL = false;
+        }
 
         // Draw points
         if (drawPoints) {
@@ -240,9 +244,13 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
     @Override
     public void drawTransparent() {
-        if (!draw && alpha==1f) return;
+        if (!draw || alpha==1f) return;
         configGL();
-        if(updateGL) loadSortedEBO();
+
+        if(updateGL) {
+            loadSortedEBO();
+            updateGL = false;
+        }
 
         // Draw triangles
         GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
@@ -281,10 +289,20 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteVertexArrays(1, vao, 0);
+        if (vbo != null) {
+            GLES32.glDeleteBuffers(1, vbo, 0);
+            vbo = null;
+        }
 
-        GLES32.glDeleteBuffers(1, vbo, 0);
-        GLES32.glDeleteBuffers(1, ebo, 0);
+        if (ebo != null) {
+            GLES32.glDeleteBuffers(1, ebo, 0);
+            ebo = null;
+        }
+
+        if (vao != null) {
+            GLES32.glDeleteVertexArrays(1, vao, 0);
+            vao = null;
+        }
     }
 
 
@@ -360,7 +378,6 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         intBuffer.rewind();
 
         GLES32.glBufferSubData(GLES32.GL_ELEMENT_ARRAY_BUFFER, 0, 4*faces.length, intBuffer);
-        updateGL = false;
     }
 
 
@@ -399,5 +416,14 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     public void setDrawBB(boolean newDrawBB) {
         drawBB = newDrawBB;
         boundingbox.setDraw(drawBB);
+    }
+
+
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+        updateGL = true;
+        boundingbox.onPause();
     }
 }

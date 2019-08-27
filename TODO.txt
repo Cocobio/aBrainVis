@@ -4,8 +4,8 @@ TODO:
     Mesh
         Add support for GIFTI
     Fix sliders in mri_fragment (vertical size is not matching parent)
-    Delete bundle names from strings.xml and from mainactivity
-    Fix onPause data been destroyed
+    Delete bundle names from strings.xml and from main activity
+    Status bar, home and back button not hiding, need fix
 
 EMERGENCY:
 
@@ -25,6 +25,8 @@ PATCHES TO BE FIXED:
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Fix onPause data been destroyed. Fixed by adding onPause to BaseVisualization, that destroys all OpenGL data and set the loading flag back to true ( openGLLoaded )
+
     Allow app to work in fullscreen through code. Android manifest android.maxAspectRatio = 2.1
 
     Fixed bug on MRI Volume, visualization was drawing even when draw was on false

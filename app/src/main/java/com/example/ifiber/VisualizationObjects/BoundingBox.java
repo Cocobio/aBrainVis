@@ -186,10 +186,20 @@ public class BoundingBox extends BaseVisualization {
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteVertexArrays(1, vao, 0);
+        if (vbo != null) {
+            GLES32.glDeleteBuffers(1, vbo, 0);
+            vbo = null;
+        }
 
-        GLES32.glDeleteBuffers(1, vbo, 0);
-        GLES32.glDeleteBuffers(1, ebo, 0);
+        if (ebo != null) {
+            GLES32.glDeleteBuffers(1, ebo, 0);
+            ebo = null;
+        }
+
+        if (vao != null) {
+            GLES32.glDeleteVertexArrays(1, vao, 0);
+            vao = null;
+        }
     }
 
 
@@ -206,4 +216,12 @@ public class BoundingBox extends BaseVisualization {
 
 
     public void setDraw(boolean newDraw) { draw = newDraw; }
+
+
+    @Override
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+    }
 }

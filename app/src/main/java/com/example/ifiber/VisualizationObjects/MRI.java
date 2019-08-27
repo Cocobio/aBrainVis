@@ -188,7 +188,10 @@ public class MRI extends BaseVisualization {
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteBuffers(1, vbo, 0);
+        if (vbo != null) {
+            GLES32.glDeleteBuffers(1, vbo, 0);
+            vbo = null;
+        }
     }
 
 
@@ -241,5 +244,13 @@ public class MRI extends BaseVisualization {
     public void setDrawBB(boolean newDrawBB) {
         drawBB = newDrawBB;
         boundingbox.setDraw(drawBB);
+    }
+
+
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+        boundingbox.onPause();
     }
 }

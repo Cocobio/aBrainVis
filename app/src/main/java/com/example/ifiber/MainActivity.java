@@ -158,13 +158,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
     @Override
     protected void onPause() {
+        Log.e("MainActivity", "onPause");
         super.onPause();
         mGLView.onPause();
+        myRenderer.onPause();
     }
 
     @Override
     protected void onResume() {
+        Log.e("MainActivity", "onResume");
         super.onResume();
         mGLView.onResume();
+        myRenderer.onResume();
     }
 }

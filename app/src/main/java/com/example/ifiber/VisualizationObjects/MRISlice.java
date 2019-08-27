@@ -242,7 +242,10 @@ public class MRISlice extends BaseVisualization {
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteVertexArrays(1, vao, 0);
+        if (vao != null) {
+            GLES32.glDeleteVertexArrays(1, vao, 0);
+            vao = null;
+        }
     }
 
 
@@ -391,5 +394,13 @@ public class MRISlice extends BaseVisualization {
         loadStaticUniforms(shaderReturn[0]);
 
         return shaderReturn;
+    }
+
+
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+        boundingbox.onPause();
     }
 }

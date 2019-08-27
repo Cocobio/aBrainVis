@@ -84,8 +84,10 @@ public class Bundle extends BaseVisualization {
 
 
     public void loadOpenGLVariables(){
-        if (updateEBOFlag)
+        if (updateEBOFlag) {
             updateEBO();
+            updateEBOFlag = false;
+        }
         if (openGLLoaded)
             return;
         loadColorTexture();
@@ -564,10 +566,20 @@ public class Bundle extends BaseVisualization {
 
     @Override
     public void cleanOpenGL() {
-        GLES32.glDeleteVertexArrays(1, vao, 0);
+        if (vbo != null) {
+            GLES32.glDeleteBuffers(3, vbo, 0);
+            vbo = null;
+        }
 
-        GLES32.glDeleteBuffers(3, vbo, 0);
-        GLES32.glDeleteBuffers(1, ebo, 0);
+        if (ebo != null) {
+            GLES32.glDeleteBuffers(1, ebo, 0);
+            ebo = null;
+        }
+
+        if (vao != null) {
+            GLES32.glDeleteVertexArrays(1, vao, 0);
+            vao = null;
+        }
 
         GLES32.glDeleteTextures(1, hColorTableTexture, 0);
     }
@@ -733,5 +745,13 @@ public class Bundle extends BaseVisualization {
         shaderReturn[0] = new Shader(vs, fs, gs, c);
 
         return shaderReturn;
+    }
+
+
+    public void onPause() {
+        cleanOpenGL();
+
+        openGLLoaded = false;
+        boundingbox.onPause();
     }
 }

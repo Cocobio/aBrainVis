@@ -173,4 +173,7 @@ public class BaseVisualization{
     public void setDrawBB(boolean newDrawBB) {
         Log.e(TAG, "setDrawBB not implemented in: "+TAG);
     }
+
+
+    public void onPause() {Log.e(TAG, "onPause method is not implemented for: "+TAG);}
 }
