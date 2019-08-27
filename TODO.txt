@@ -4,7 +4,6 @@ TODO:
     Mesh
         Add support for GIFTI
     Fix sliders in mri_fragment (vertical size is not matching parent)
-    Status bar, home and back button not hiding, need fix
     onResume must update shader references... they could change and cause a crash
     Pop-up view destroys the data
 
@@ -20,9 +19,13 @@ Testing if DONE:
 PATCHES TO BE FIXED:
     After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
 
+    Status bar, home and back button hiding but must eliminate animation.
+
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Status bar, home and back button not hiding, need fix
+
     Mesh
         GUI for interaction with Mesh object, lines and opacity. Color as well.
 

@@ -42,11 +42,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         IlumFragment=new IlluminationFragment();
         FBFragment=new FileBrowserFragment();
         BLFragment=new BundleListFragment();
@@ -169,8 +164,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     @Override
     protected void onResume() {
         Log.e("MainActivity", "onResume");
+//        View decorView = getWindow().getDecorView();
+//        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         super.onResume();
         mGLView.onResume();
         myRenderer.onResume();
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+        }
     }
 }
