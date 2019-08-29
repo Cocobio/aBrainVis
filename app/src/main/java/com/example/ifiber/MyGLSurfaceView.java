@@ -3,7 +3,6 @@ package com.example.ifiber;
 import android.content.Context;
 import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 
@@ -51,14 +50,21 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     float dx = e.getX(0) - mActivePointers.get(e.getPointerId(0)).x;
                     float dy = e.getY(0) - mActivePointers.get(e.getPointerId(0)).y;
 
-                    mRenderer.orbitCam(dx, dy);
+                    mRenderer.orbitCamera(dx, dy);
                     requestRender();
                 }
                 else if (size == 2) {
-                    float delta = (float)((Math.sqrt(Math.pow(mActivePointers.get(e.getPointerId(0)).x - mActivePointers.get(e.getPointerId(1)).x, 2) + Math.pow(mActivePointers.get(e.getPointerId(0)).y - mActivePointers.get(e.getPointerId(1)).y, 2))) -
-                            (Math.sqrt(Math.pow(e.getX(0) - e.getX(1), 2) + Math.pow(e.getY(0) - e.getY(1), 2))));
+//                    float delta = (float)((Math.sqrt(
+//                            Math.pow(mActivePointers.get(e.getPointerId(0)).x - mActivePointers.get(e.getPointerId(1)).x, 2) +
+//                                    Math.pow(mActivePointers.get(e.getPointerId(0)).y - mActivePointers.get(e.getPointerId(1)).y, 2))) -
+//                            (Math.sqrt(Math.pow(e.getX(0) - e.getX(1), 2) + Math.pow(e.getY(0) - e.getY(1), 2))));
+                    PointF p1_prev = mActivePointers.get(e.getPointerId(0));
+                    PointF p1_next = new PointF(e.getX(0), e.getY(0));
 
-                    mRenderer.zoomCam(delta);
+                    PointF p2_prev = mActivePointers.get(e.getPointerId(1));
+                    PointF p2_next = new PointF(e.getX(1), e.getY(1));
+
+                    mRenderer.modifyCamera(p1_prev.x, p1_prev.y, p2_prev.x, p2_prev.y, p1_next.x, p1_next.y, p2_next.x, p2_next.y);
                     requestRender();
                 }
                 else {
@@ -79,7 +85,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     actuAv.x /= size;
                     actuAv.y /= size;
 
-                    mRenderer.panCam(actuAv.x-prevAv.x, actuAv.y-prevAv.y);
+                    mRenderer.panCamera(actuAv.x-prevAv.x, actuAv.y-prevAv.y);
                     requestRender();
                 }
 

@@ -1,16 +1,18 @@
 TODO:
+    Bundle
+        Add cylinder drawing (just because)
     MRI Slice
         GUI for interaction with Slice object
     Mesh
         Add support for GIFTI
     Fix sliders in mri_fragment (vertical size is not matching parent)
-    onResume must update shader references... they could change and cause a crash
     Pop-up view destroys the data
 
 EMERGENCY:
 
 DOING:
-    Zoom and Pan with 2 fingers... and rotation (transverse from the view)
+    onResume must update shader references... they could change and cause a crash
+    Can't delete multiples files
 
 Testing if DONE:
     Fix apk install failure
@@ -24,6 +26,8 @@ PATCHES TO BE FIXED:
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Zoom and Pan with 2 fingers... and rotation (transverse from the view)
+
     Status bar, home and back button not hiding, need fix
 
     Mesh

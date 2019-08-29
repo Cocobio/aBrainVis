@@ -63,6 +63,19 @@ public class Camera {
     }
 
 
+    public void transverseRotation(float angle) {
+        if (angle == 0.0) return;
+
+        float[] newRotationQ = new float[4];
+        Quaternion.fromAngleAndAxis(newRotationQ,0, angle, 0, 0, 1);
+        Quaternion.multiplyQQ(rotation,0, rotation,0, newRotationQ,0);
+
+        Quaternion.normalize(rotation,0);
+
+        calculateView();
+    }
+
+
     public void panning(float dx, float dy) {
         float[] vector = {-dx * scaleFactor, dy * scaleFactor, 0f, 1f};
         Quaternion.rotate3V(vector,0, rotation,0);
