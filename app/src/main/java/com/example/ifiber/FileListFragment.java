@@ -48,9 +48,11 @@ public class FileListFragment extends ListFragment {
             SelectAll.setOnClickListener(new View.OnClickListener() {
                @Override
                 public void onClick(View v) {
-                    for(int i=0;i< DisplayFiles.length;i++ ){
+                    for(int i=DisplayFiles.length-1; i>=0 ; i--){
+                        Log.e("FLF", "DisplayFiles["+i+"]: "+DisplayFiles[i]);
                         if (DisplayFiles[i]){
                             String fileName = files.get(i);
+                            Log.e("FLF", "fileName: "+fileName);
                             if (fileName.endsWith(".nii")|| fileName.endsWith(".nii.gz")){
                                 String axis[] = { "X","Y","Z","MRI","vol"};
                                 for (String s : axis){
@@ -118,14 +120,6 @@ public class FileListFragment extends ListFragment {
         ((CheckBox)v.findViewById(R.id.bundlecheckbox)).toggle();
         DisplayFiles[position] = !DisplayFiles[position];
 
-        ((MainActivity) getActivity()).mGLView.requestRender();
-    }
-
-    private void ChangeState(View v,Vector<String> bundles, boolean isChecked){
-        for (int i = 0; i < bundles.size(); i++) {
-            DisplayFiles[i] = isChecked;
-        }
-        fileList.notifyDataSetChanged();
         ((MainActivity) getActivity()).mGLView.requestRender();
     }
 
