@@ -98,6 +98,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         shaderChain.put(MRIVolume.identifier, MRIVolume.shaderPrograms(context));
         shaderChain.put(MRISlice.identifier, MRISlice.shaderPrograms(context));
 
+        // Make the references again after onResume
+        for (BaseVisualization i : sceneTree)
+            i.updateReferenceToShader(shaderChain);
+
         coordinateSystemShader = CoordinateSystem.shaderPrograms(context);
 
         // Scale so the depth buffer works properly
@@ -484,10 +488,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onPause() {
         for (BaseVisualization i : sceneTree)
             i.onPause();
+        shaderChain.clear();
     }
 
 
     public void onResume() {
 //        Actualizar los shaders
+//        for (BaseVisualization i : sceneTree)
+//            i.onResume(shaderChain);
     }
 }

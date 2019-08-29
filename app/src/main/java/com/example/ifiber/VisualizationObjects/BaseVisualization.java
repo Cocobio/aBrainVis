@@ -7,6 +7,8 @@ import android.util.Log;
 import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.VisualizationType;
 
+import java.util.Map;
+
 
 public class BaseVisualization{
     protected VisualizationType identifier = null;
@@ -175,5 +177,8 @@ public class BaseVisualization{
     }
 
 
-    public void onPause() {Log.e(TAG, "onPause method is not implemented for: "+TAG);}
+    public void onPause() { Log.e(TAG, "onPause method is not implemented for: "+TAG); }
+
+
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) { Log.e(TAG, "updateReferenceToShader method is not implemented for: "+TAG); }
 }

@@ -224,4 +224,10 @@ public class BoundingBox extends BaseVisualization {
 
         openGLLoaded = false;
     }
+
+
+    @Override
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
+        shader = shaderChain.get(identifier);
+    }
 }

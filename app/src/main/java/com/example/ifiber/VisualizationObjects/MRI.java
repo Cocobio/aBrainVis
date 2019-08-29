@@ -253,4 +253,10 @@ public class MRI extends BaseVisualization {
         openGLLoaded = false;
         boundingbox.onPause();
     }
+
+
+    @Override
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
+        boundingbox.updateReferenceToShader(shaderChain);
+    }
 }

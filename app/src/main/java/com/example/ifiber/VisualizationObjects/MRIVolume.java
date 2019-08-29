@@ -420,4 +420,11 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
         openGLLoaded = false;
         boundingbox.onPause();
     }
+
+
+    @Override
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
+        shader = shaderChain.get(identifier);
+        boundingbox.updateReferenceToShader(shaderChain);
+    }
 }

@@ -456,4 +456,11 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         updateGL = true;
         boundingbox.onPause();
     }
+
+
+    @Override
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
+        shader = shaderChain.get(identifier);
+        boundingbox.updateReferenceToShader(shaderChain);
+    }
 }

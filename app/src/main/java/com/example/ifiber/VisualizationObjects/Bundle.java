@@ -748,10 +748,18 @@ public class Bundle extends BaseVisualization {
     }
 
 
+    @Override
     public void onPause() {
         cleanOpenGL();
 
         openGLLoaded = false;
         boundingbox.onPause();
+    }
+
+
+    @Override
+    public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
+        shader = shaderChain.get(identifier);
+        boundingbox.updateReferenceToShader(shaderChain);
     }
 }
