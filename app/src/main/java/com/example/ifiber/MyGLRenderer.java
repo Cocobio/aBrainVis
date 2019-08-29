@@ -54,13 +54,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float fov = FOV_DEFAULT_VALUE;
     private Vector<Shader> lightShader = new Vector<>();
 
-    private float[] clearColor = new float[4];
+    private float[] clearColor = {defaultBackgroundColor[0], defaultBackgroundColor[1], defaultBackgroundColor[2], defaultBackgroundColor[3]};
 
-    private float[] lightPosition = new float[3];
-    private float lightLa, lightLd, lightLs;
+    private float[] lightPosition = {defaultLightPosition[0], defaultLightPosition[1], defaultLightPosition[2]};
+    private float lightLa = defaultLightLa, lightLd = defaultLightLd, lightLs = defaultLightLs;
 
-    private float materialKa, materialKd, materialKs;
-    private float shininess;
+    private float materialKa = defaultMaterialKa, materialKd = defaultMaterialKd, materialKs = defaultMaterialKs;
+    private float shininess = defaultShininess;
 
     private int surfaceWidth = 0, surfaceHeight = 0, coordinateWidth = 500, coordinateHeight = 500;
 
@@ -90,8 +90,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Log.d(TAG, "OpenGL version: "+GLES32.glGetString(GLES32.GL_VERSION));
         Log.d(TAG, "Max texture size: "+maxTextureSize[0]);
         Log.d(TAG, "Max 3D texture size: "+max3DTextureSize[0]);
-
-        setDefaultValues();
 
         // Shader collection
         shaderChain.put(Bundle.identifier, Bundle.shaderPrograms(context));

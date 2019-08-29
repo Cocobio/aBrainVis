@@ -7,6 +7,8 @@ TODO:
         Add support for GIFTI
     Fix sliders in mri_fragment (vertical size is not matching parent)
     Pop-up view destroys the data
+    Connect settings with lighting and material data
+    Fix lighting parameters in all shaders.
 
 EMERGENCY:
 
@@ -25,8 +27,10 @@ PATCHES TO BE FIXED:
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
 DONE:
+    Fixed: color from background went back to default after changing and onPause, onResume events
+
     Can't delete multiples files
-    
+
     Zoom and Pan with 2 fingers... and rotation (transverse from the view)
 
     Status bar, home and back button not hiding, need fix
