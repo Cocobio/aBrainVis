@@ -26,6 +26,8 @@ public class FileBrowserFragment extends ListFragment {
     private String root;
     private TextView myPath;
 
+    private AlertDialog dialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_file_browser, container,false);
@@ -34,6 +36,8 @@ public class FileBrowserFragment extends ListFragment {
         myPath = (TextView)view.findViewById(R.id.path);
         root = Environment.getExternalStorageDirectory().getPath();
         getDir(root);
+
+        dialog = null;
 
         return view;
     }
@@ -91,7 +95,8 @@ public class FileBrowserFragment extends ListFragment {
             }
         }else {
 //            if(file.toString().endsWith(".bundles")){
-            AlertDialog dialog =new AlertDialog.Builder(getActivity())
+            if (dialog != null) dialog.hide();
+            dialog =new AlertDialog.Builder(getActivity())
                     .setMessage("Display " + file.getName() + "?")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -109,6 +114,7 @@ public class FileBrowserFragment extends ListFragment {
 //            }
         }
     }
+
 
     @Override
     public void onAttach(Activity activity) {
