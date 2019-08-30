@@ -45,6 +45,8 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     static private final float[] vertexPoints = {   1,1,0,  1,1,1,	0,1,0,	0,1,1,
                                                     1,0,0,	1,0,1,	0,0,0,	0,0,1};
 
+    private final static float[] materialValues = {0.5f, 0.6f, 0.4f, 2f};
+
     public MRIVolume(Map<VisualizationType, Shader[]> shaderChain, MRI mri) {
         super();
 
@@ -412,6 +414,40 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
         return shaderReturn;
     }
+
+
+    public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain) {
+        Shader[] ss = shaderChain.get(identifier);
+
+        for (Shader s : ss) {
+            s.glUseProgram();
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ka"), materialValues[0]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Kd"), materialValues[1]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ks"), materialValues[2]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.shininess"), materialValues[3]);
+        }
+    }
+
+
+    public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain, float newKa, float newKd, float newKs, float newShininess) {
+        Shader[] ss = shaderChain.get(identifier);
+
+        materialValues[0] = newKa;
+        materialValues[1] = newKd;
+        materialValues[2] = newKs;
+        materialValues[3] = newShininess;
+
+        for (Shader s : ss) {
+            s.glUseProgram();
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ka"), materialValues[0]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Kd"), materialValues[1]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ks"), materialValues[2]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.shininess"), materialValues[3]);
+        }
+    }
+
+
+    public static void getMaterialValues(float[] container, int offset) { for (int i=0; i<4; i++) container[offset+i] = materialValues[i]; }
 
 
     public void onPause() {

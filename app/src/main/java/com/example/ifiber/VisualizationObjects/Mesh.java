@@ -40,6 +40,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
     private float[] tColor = {0.7f, 0.7f, 0.7f};
     private float alpha = 0.5f;
 
+    private final static float[] materialValues = {1f, 0.8f, 0.7f, 5f};
+
     private boolean drawTriangles = true;
     private boolean drawPoints = false;
     private boolean drawLines = false;
@@ -447,6 +449,40 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
 
     public String getFileName() { return fileName; }
+
+
+    public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain) {
+        Shader[] ss = shaderChain.get(identifier);
+
+        for (Shader s : ss) {
+            s.glUseProgram();
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ka"), materialValues[0]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Kd"), materialValues[1]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ks"), materialValues[2]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.shininess"), materialValues[3]);
+        }
+    }
+
+
+    public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain, float newKa, float newKd, float newKs, float newShininess) {
+        Shader[] ss = shaderChain.get(identifier);
+
+        materialValues[0] = newKa;
+        materialValues[1] = newKd;
+        materialValues[2] = newKs;
+        materialValues[3] = newShininess;
+
+        for (Shader s : ss) {
+            s.glUseProgram();
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ka"), materialValues[0]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Kd"), materialValues[1]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.Ks"), materialValues[2]);
+            GLES32.glUniform1f(s.glGetUniformLocation("Material.shininess"), materialValues[3]);
+        }
+    }
+
+
+    public static void getMaterialValues(float[] container, int offset) { for (int i=0; i<4; i++) container[offset+i] = materialValues[i]; }
 
 
     public void onPause() {

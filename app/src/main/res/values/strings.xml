@@ -20,4 +20,10 @@
         <item>Wireframe</item>
         <item>Points</item>
     </string-array>
+
+    <string-array name="material_reflectance_spinner">
+        <item>Bundle</item>
+        <item>Mesh</item>
+        <item>MRI Volume</item>
+    </string-array>
 </resources>

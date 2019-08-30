@@ -11,14 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="3"
-        android:background="#00ffffff"
         android:paddingBottom="10dp">
 
         <LinearLayout
-            android:id="@+id/coloreslayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.94"
+            android:layout_weight="1"
             android:clickable="true"
             android:gravity="bottom"
             android:orientation="vertical"
@@ -26,7 +24,6 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/TextViewBGcolor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -47,16 +44,14 @@
                     android:textSize="15sp" />
 
                 <SeekBar
-                    android:id="@+id/red"
+                    android:id="@+id/bg_red_seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:clickable="true"
                     android:max="255"
                     android:paddingTop="5dp"
-                    android:progress="64"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3" />
+                    android:progress="64" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,16 +67,14 @@
                     android:textSize="15sp" />
 
                 <SeekBar
-                    android:id="@+id/green"
+                    android:id="@+id/bg_green_seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:clickable="true"
                     android:max="255"
                     android:paddingTop="5dp"
-                    android:progress="64"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3" />
+                    android:progress="64" />
             </LinearLayout>
 
             <LinearLayout
@@ -97,16 +90,14 @@
                     android:textSize="15sp" />
 
                 <SeekBar
-                    android:id="@+id/blue"
+                    android:id="@+id/bg_blue_seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:clickable="true"
                     android:max="255"
                     android:paddingTop="5dp"
-                    android:progress="64"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3" />
+                    android:progress="64" />
             </LinearLayout>
         </LinearLayout>
 
@@ -120,7 +111,7 @@
             android:id="@+id/iluminationlayout"
             android:paddingRight="10dp"
             android:gravity="bottom"
-            android:layout_weight="0.06">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/textViewIlum"
@@ -140,17 +131,15 @@
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum1"
-                android:progress="50"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/light_ambient_seekbar"
+                    android:progress="50"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,17 +151,15 @@
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum2"
-                android:progress="60"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true" />
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/light_diffuse_seekbar"
+                    android:progress="60"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -184,18 +171,16 @@
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum3"
-                android:progress="100"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"/>
-        </LinearLayout>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/light_specular_seekbar"
+                    android:progress="100"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -209,35 +194,43 @@
             android:layout_weight="1"
             android:paddingRight="10dp"
             android:gravity="bottom">
-            <TextView
-                android:id="@+id/textViewReflectance"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Reflectance K"
-                android:textColor="#ffffffff"
-                android:textSize="15sp"
-                android:layout_gravity="center" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/textViewReflectance"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Material for: "
+                    android:textColor="#ffffffff"
+                    android:textSize="15sp"
+                    android:layout_gravity="center" />
+                <Spinner
+                    android:id="@+id/materialSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/material_reflectance_spinner" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A"
+                    android:text="Ka"
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum4"
-                android:progress="100"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/material_ambient_seekbar"
+                    android:progress="100"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -245,21 +238,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="D"
+                    android:text="Kd"
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum5"
-                android:progress="80"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/material_diffuse_seekbar"
+                    android:progress="80"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -267,21 +258,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S"
+                    android:text="Ks"
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum6"
-                android:progress="80"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/material_specular_seekbar"
+                    android:progress="80"
+                    android:max="100"
+                    android:paddingTop="5dp"
+                    android:clickable="true"
+                    android:layout_centerVertical="true"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -293,131 +282,19 @@
                     android:textSize="15sp"
                     android:textColor="#ffffffff"
                     android:layout_gravity="center_vertical"/>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/ilum7"
-                android:progress="100"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:clickable="true"
-                android:progressDrawable="@drawable/styled_progress"
-                android:thumb="@drawable/thumb3"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="-10dp" />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="1"
-            android:clickable="true"
-            android:paddingLeft="10dp"
-            android:id="@+id/mesh_colorlayout"
-            android:layout_weight="1"
-            android:paddingRight="10dp"
-            android:gravity="bottom">
-
-            <TextView
-                android:id="@+id/textViewcolormesh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Color Mesh"
-                android:textColor="#ffffffff"
-                android:textSize="15sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="R"
-                    android:textSize="15sp"
-                    android:textColor="#ffffffff"
-                    android:layout_gravity="center_vertical"/>
                 <SeekBar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/red_mesh"
-                    android:progress="125"
-                    android:max="255"
-                    android:paddingTop="5dp"
-                    android:clickable="true"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3"
-                    android:layout_centerVertical="true"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="G"
-                    android:textSize="15sp"
-                    android:textColor="#ffffffff"
-                    android:layout_gravity="center_vertical"/>
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/green_mesh"
-                    android:progress="125"
-                    android:max="255"
-                    android:paddingTop="5dp"
-                    android:clickable="true"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3"
-                    android:layout_centerVertical="true"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="B"
-                    android:textSize="15sp"
-                    android:textColor="#ffffffff"
-                    android:layout_gravity="center_vertical"/>
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/blue_mesh"
-                    android:progress="125"
-                    android:max="255"
-                    android:paddingTop="5dp"
-                    android:clickable="true"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3"
-                    android:layout_centerVertical="true"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="A"
-                    android:textSize="15sp"
-                    android:textColor="#ffffffff"
-                    android:layout_gravity="center_vertical"/>
-                <SeekBar
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/alpha"
+                    android:id="@+id/material_shininess_seekbar"
                     android:progress="100"
                     android:max="100"
                     android:paddingTop="5dp"
                     android:clickable="true"
-                    android:progressDrawable="@drawable/styled_progress"
-                    android:thumb="@drawable/thumb3"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="-10dp" />
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
 

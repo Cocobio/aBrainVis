@@ -50,9 +50,9 @@ struct LightInfo {
 uniform LightInfo Light;
 
 struct MaterialInfo {
-	vec3 Ka;				// Reflectividad ambiental.
-	vec3 Kd;				// Reflectividad difusa.
-	vec3 Ks;				// Reflectividad especular.
+	float Ka;				// Reflectividad ambiental.
+	float Kd;				// Reflectividad difusa.
+	float Ks;				// Reflectividad especular.
 	float shininess;		// Coeficiente de reflexion especular.
 };
 uniform MaterialInfo Material;
@@ -63,7 +63,7 @@ vec3 blinn_phong_shading(vec3 N, vec3 L, vec3 V);
 
 
 // Cook-Torrance illumination
-vec3 cook_torrance_shading(vec3 N, vec3 L, vec3 V);
+// vec3 cook_torrance_shading(vec3 N, vec3 L, vec3 V);
 
 
 vec3 gradientEstimation(sampler3D textureIdx, vec3 textureCoor);
@@ -81,7 +81,7 @@ void main(void) {
 
 	// Central difference and normalization / calculate light - and viewing direction
 	vec3 N = /*(vec4(*/axis * gradientEstimation(mriTexture, texCoord);//, 1.0)).xyz;
-	vec3 L = normalize(eye - positionOut);	// light position
+	vec3 L = Light.pos.xyz;//normalize(eye - positionOut);	// light position
 	vec3 V = normalize(eye - positionOut);
 
 	// Local illumination
@@ -109,29 +109,32 @@ vec3 gradientEstimation(sampler3D textureIdx, vec3 textureCoor) {
 
 vec3 blinn_phong_shading(vec3 N, vec3 L, vec3 V) {
 	// material properties
-	float Ka = 0.1;		// ambient
-	float Kd = 0.6;		// diffuse
-	float Ks = 0.2;		// specular
-	float n = 100.0;	// shininess
+	// float Ka = 0.1;		// ambient
+	// float Kd = 0.6;		// diffuse
+	// float Ks = 0.2;		// specular
+	// float n = 100.0;	// shininess
 
 	// light properties
-	vec3 lightColor = vec3(1.0, 1.0, 1.0);
-	vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+	// vec3 lightColor = vec3(1.0, 1.0, 1.0);
+	// vec3 ambientLight = vec3(0.3, 0.3, 0.3);
 
 	// Calculate halfway vector
 	vec3 H = normalize(L + V);
 
 	// Compute ambient term
-	vec3 ambient = Ka * ambientLight;
+	vec3 ambient = Light.La*Material.Ka;
 
 	// Compute the diffuse term
-	float diffuseLight = max(dot(L, N), 0.0);
-	vec3 diffuse = Kd * lightColor * diffuseLight;
+	// float diffuseLight = max(dot(L, N), 0.0);
+	// vec3 diffuse = Kd * lightColor * diffuseLight;
+	vec3 diffuse = Light.Ld*Material.Kd*max(dot(L, N), 0.0);
 
 	// Compute the specular term
-	float specularLight = pow(max(dot(H, N), 0.0), n);
-	if (diffuseLight <= 0.0) specularLight = 0.0;
-	vec3 specular = Ks * lightColor * specularLight;
+	// float specularLight = pow(max(dot(H, N), 0.0), n);
+	// if (diffuseLight <= 0.0) specularLight = 0.0;
+	// vec3 specular = Ks * lightColor * specularLight;
+
+	vec3 specular = Light.Ls*Material.Ks*pow(max(dot(H,N), 0.0), Material.shininess);
 
 	return ambient + diffuse + specular;
 }

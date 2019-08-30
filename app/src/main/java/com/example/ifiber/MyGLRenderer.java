@@ -36,14 +36,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private float scaleFactor = 0.02f;
 
     final private static float[] defaultBackgroundColor = {0.2f, 0.2f, 0.2f, 1.0f};
-    final private static float[] defaultLightPosition = {0f, 100f, 0f};
+    final private static float[] defaultLightPosition = {0f, 100f, 450f};
     final private float defaultLightLa = 0.5f;
     final private float defaultLightLd = 0.6f;
     final private float defaultLightLs = 1f;
-    final private float defaultMaterialKa = 1f;
-    final private float defaultMaterialKd = 0.8f;
-    final private float defaultMaterialKs = 0.7f;
-    final private float defaultShininess = 5f;
+//    final private float defaultMaterialKa = 1f;
+//    final private float defaultMaterialKd = 0.8f;
+//    final private float defaultMaterialKs = 0.7f;
+//    final private float defaultShininess = 5f;
 
     private Map<VisualizationType, Shader[]> shaderChain = new HashMap<>();
     private Shader[] coordinateSystemShader;
@@ -52,15 +52,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     static final private float FOV_FLOOR_LIMITER = 1.0f;
     static final private float FOV_CEIL_LIMITER = 150.f;
     private float fov = FOV_DEFAULT_VALUE;
-    private Vector<Shader> lightShader = new Vector<>();
+    private Map<VisualizationType, Shader> lightShader = new HashMap<>();
 
     private float[] clearColor = {defaultBackgroundColor[0], defaultBackgroundColor[1], defaultBackgroundColor[2], defaultBackgroundColor[3]};
 
     private float[] lightPosition = {defaultLightPosition[0], defaultLightPosition[1], defaultLightPosition[2]};
     private float lightLa = defaultLightLa, lightLd = defaultLightLd, lightLs = defaultLightLs;
 
-    private float materialKa = defaultMaterialKa, materialKd = defaultMaterialKd, materialKs = defaultMaterialKs;
-    private float shininess = defaultShininess;
+//    private float materialKa = defaultMaterialKa, materialKd = defaultMaterialKd, materialKs = defaultMaterialKs;
+//    private float shininess = defaultShininess;
 
     private int surfaceWidth = 0, surfaceHeight = 0, coordinateWidth = 500, coordinateHeight = 500;
 
@@ -117,6 +117,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Config light parameters and view
         configLight();
         configView();
+        configMaterials();
 
         // Initialize some variables
         coordinateSystem = new CoordinateSystem(coordinateSystemShader);
@@ -146,6 +147,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         configPerspective();
         configView();
         configCoordinateView();
+        configLight();
+        configMaterials();
 
         GLES32.glViewport(0, 0, surfaceWidth, surfaceHeight);
 
@@ -170,7 +173,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private void setDefaultValues() {
         setDefaultBackgroundColor();
         setDefaultLight();
-        setDefaultMaterial();
+//        setDefaultMaterial();
     }
 
 
@@ -187,17 +190,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    private void setDefaultMaterial() {
-        materialKa = defaultMaterialKa;
-        materialKd = defaultMaterialKd;
-        materialKs = defaultMaterialKs;
-        shininess = defaultShininess;
-    }
+//    private void setDefaultMaterial() {
+//        materialKa = defaultMaterialKa;
+//        materialKd = defaultMaterialKd;
+//        materialKs = defaultMaterialKs;
+//        shininess = defaultShininess;
+//    }
 
 
     private void populateLightShader() {
-        for (Shader[] ss : shaderChain.values())
-            for (Shader s : ss) {
+        for (Map.Entry<VisualizationType, Shader[]> entry : shaderChain.entrySet())
+            for (Shader s : entry.getValue())
+//        for (Shader[] ss : shaderChain.values())
+//            for (Shader s : ss)
+            {
                 boolean validator = true;
                 validator &= s.glGetUniformLocation("Light.pos") != -1;
                 validator &= s.glGetUniformLocation("Light.La") != -1;
@@ -210,23 +216,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 validator &= s.glGetUniformLocation("Material.shininess") != -1;
 
                 if (validator)
-                    lightShader.add(s);
+                    lightShader.put(entry.getKey(), s);
+                else Log.e(TAG, "Light not found for: "+entry.getKey());
             }
+
     }
 
 
     private void configLight() {
-        for (Shader s : lightShader) {
+        for (Shader s : lightShader.values()) {
             s.glUseProgram();
             GLES32.glUniform3f(s.glGetUniformLocation("Light.pos"), lightPosition[0], lightPosition[1], lightPosition[2]);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.La"), lightLa, lightLa, lightLa);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.Ld"), lightLd, lightLd, lightLd);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.Ls"), lightLs, lightLs, lightLs);
-
-            GLES32.glUniform3f(s.glGetUniformLocation("Material.Ka"), materialKa, materialKa, materialKa);
-            GLES32.glUniform3f(s.glGetUniformLocation("Material.Kd"), materialKd, materialKd, materialKd);
-            GLES32.glUniform3f(s.glGetUniformLocation("Material.Ks"), materialKs, materialKs, materialKs);
-            GLES32.glUniform1f(s.glGetUniformLocation("Material.shininess"), shininess);
         }
     }
 
@@ -237,6 +240,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 s.glUseProgram();
                 GLES32.glUniformMatrix4fv(s.glGetUniformLocation("V"),1,false, viewMatrix, 0);
             }
+    }
+
+
+    private void configMaterials() {
+        Bundle.updateMaterialValues(shaderChain);
+        Mesh.updateMaterialValues(shaderChain);
+        MRIVolume.updateMaterialValues(shaderChain);
     }
 
 
@@ -268,20 +278,30 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-    public void onChangeBackground(float value, int color){
-        switch (color){
-            case 0: clearColor[0] = value;
+    public void changeBackground(float bgRed, float bgGreen, float bgBlue){
+        clearColor[0] = bgRed;
+        clearColor[1] = bgGreen;
+        clearColor[2] = bgBlue;
+    }
+
+
+    public void changeLight(float lightA, float lightD, float lightS){
+        lightLa = lightA;
+        lightLd = lightD;
+        lightLs = lightS;
+    }
+
+
+    public void changeMaterial(int materialID, float materialKa, float materialKd, float materialKs, float materialShininess) {
+        switch(materialID) {
+            case 0:
+                Bundle.updateMaterialValues(shaderChain, materialKa, materialKd, materialKs, materialShininess);
                 break;
-            case 1: clearColor[1] = value;
+            case 1:
+                Mesh.updateMaterialValues(shaderChain, materialKa, materialKd, materialKs, materialShininess);
                 break;
-            case 2: clearColor[2] = value;
-                break;
-            case 3: lightPosition[0] = value;
-                break;
-            case 4: lightPosition[1] = value;
-                break;
-            case 5: lightPosition[2] = value;
-                break;
+            case 2:
+                MRIVolume.updateMaterialValues(shaderChain, materialKa, materialKd, materialKs, materialShininess);
         }
     }
 

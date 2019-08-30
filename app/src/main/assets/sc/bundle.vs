@@ -22,9 +22,9 @@ struct LightInfo {
 uniform LightInfo Light;
 
 struct MaterialInfo {
-	vec3 Ka;				// Reflectividad ambiental.
-	vec3 Kd;				// Reflectividad difusa.
-	vec3 Ks;				// Reflectividad especular.
+	float Ka;				// Reflectividad ambiental.
+	float Kd;				// Reflectividad difusa.
+	float Ks;				// Reflectividad especular.
 	float shininess;		// Coeficiente de reflexion especular.
 };
 uniform MaterialInfo Material;

@@ -8,9 +8,7 @@
 
 // Los parametros del plano son cargados como unifom, al igual que los vectores v1, v2, etc.
 
-// Este algoritmo es explicado en el libro "real-time volume render".
-
-
+// Este algoritmo es explicado en el libro "real-time volume render"
 
 
 // Render uniforms

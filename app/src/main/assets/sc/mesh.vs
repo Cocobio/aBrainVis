@@ -23,9 +23,9 @@ uniform LightInfo Light;
 
 // Material del modelo
 struct MaterialInfo {
-    vec3 Ka;
-    vec3 Kd;
-    vec3 Ks;
+    float Ka;
+    float Kd;
+    float Ks;
     float shininess;    // Coeficiente de reflexion especular
 };
 uniform MaterialInfo Material;
