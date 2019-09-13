@@ -833,6 +833,12 @@ public class Bundle extends BaseVisualization {
     }
 
 
+    public void setSelectedShader(int newSelectedShader) {
+        if (newSelectedShader < shaderN) selectedShader = newSelectedShader;
+        else Log.e(TAG, "Selected shader out of bound ("+newSelectedShader+"), maximum is "+shaderN+".");
+    }
+
+
     public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain) {
         Shader[] ss = shaderChain.get(identifier);
 

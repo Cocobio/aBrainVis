@@ -20,7 +20,7 @@ public class BaseVisualization{
 
     protected Shader[] shader;
     protected int selectedShader = 0;
-    static protected int shaderN = 1;
+    static public int shaderN = 1;
 
     // Matrixs
     protected float[] model = new float[16];

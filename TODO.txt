@@ -28,6 +28,8 @@ PATCHES TO BE FIXED:
 
     Rendering mode spinner changes every bundle object to cylinder drawing. Needs to fetch current drawing shader and not change if other selected a different than the default.
 
+    Bundle reimplements setSelectedShader(int newSelectedShader), because basevisualization doesnt use the class child variable, but the parent one... find a fix for this.
+
 DONE:
     Bundle
         Add cylinder drawing (just because)
