@@ -5,6 +5,7 @@ import android.opengl.GLES32;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.example.ifiber.Tools.Quaternion;
 import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.VisualizationType;
 
@@ -23,6 +24,8 @@ import java.util.Map;
 import java.util.Vector;
 
 public class Bundle extends BaseVisualization {
+    static final private int cylinderNFaces = 7;
+    static final private float cylinderRadius = 0.15f;
     public static ArrayList<String> validFileExtensions =  new ArrayList<>(Arrays.asList("bundles", "tck", "trk"));
     public static VisualizationType identifier = VisualizationType.BUNDLE;
     
@@ -44,6 +47,8 @@ public class Bundle extends BaseVisualization {
     protected int[] hColorTableTexture = null;
 
     protected BoundingBox boundingbox;
+
+    static protected int shaderN = 2;
 
     // In place segmentation bundle implementation
     private boolean[] selectedBundles;
@@ -93,6 +98,7 @@ public class Bundle extends BaseVisualization {
             return;
         loadColorTexture();
         loadGLBuffers();
+        vertexAttribPointer();
         boundingbox.loadOpenGLVariables();
         openGLLoaded = true;
     }
@@ -238,8 +244,6 @@ public class Bundle extends BaseVisualization {
 
 
     private void readTrk() {
-
-
         short[] trkNScalars = new short[1], trkNProperties = new short[1];
         boolean[] trkLittleEndian = new boolean[1];
 
@@ -481,10 +485,10 @@ public class Bundle extends BaseVisualization {
 
     private void loadGLBuffers() {
         if (vao == null) {
-            vao = new int[1];
-            GLES32.glGenVertexArrays(1, vao, 0);
+            vao = new int[shaderN];
+            GLES32.glGenVertexArrays(shaderN, vao, 0);
         }
-        GLES32.glBindVertexArray(vao[0]);
+        GLES32.glBindVertexArray(0);
 
         if (vbo == null) {
             vbo = new int[3];
@@ -496,11 +500,6 @@ public class Bundle extends BaseVisualization {
             GLES32.glGenBuffers(1, ebo, 0);
         }
 
-		// Enable attributes
-        int positionAttribute =	shader[0].glGetAttribLocation("vertexPos");
-        int normalAttribute =	shader[0].glGetAttribLocation("vertexNor");
-        int colorAttribute =	shader[0].glGetAttribLocation("vertexCol");
-
 		// VBO
         FloatBuffer floatBuffer;
         IntBuffer intBuffer;
@@ -511,8 +510,6 @@ public class Bundle extends BaseVisualization {
         floatBuffer.rewind();
 
         GLES32.glBufferData(GLES32.GL_ARRAY_BUFFER, 4*vertex.length, floatBuffer, GLES32.GL_STATIC_DRAW);
-        GLES32.glEnableVertexAttribArray(positionAttribute);
-        GLES32.glVertexAttribPointer(positionAttribute, 3, GLES32.GL_FLOAT, false, 0, 0);
 
         // Normal
         GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[1]);
@@ -520,8 +517,6 @@ public class Bundle extends BaseVisualization {
         floatBuffer.rewind();
 
         GLES32.glBufferData(GLES32.GL_ARRAY_BUFFER, 4*normals.length, floatBuffer, GLES32.GL_STATIC_DRAW);
-        GLES32.glEnableVertexAttribArray(normalAttribute);
-        GLES32.glVertexAttribPointer(normalAttribute, 3, GLES32.GL_FLOAT, false, 0, 0);
 
         // Color
         GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[2]);
@@ -529,8 +524,6 @@ public class Bundle extends BaseVisualization {
         intBuffer.rewind();
 
         GLES32.glBufferData(GLES32.GL_ARRAY_BUFFER, 4*color.length, intBuffer, GLES32.GL_STATIC_DRAW);
-        GLES32.glEnableVertexAttribArray(colorAttribute);
-        GLES32.glVertexAttribPointer(colorAttribute, 1, GLES32.GL_INT, false, 0, 0);
 
 		// EBO
         GLES32.glBindBuffer(GLES32.GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
@@ -541,10 +534,62 @@ public class Bundle extends BaseVisualization {
     }
 
 
+    private void vertexAttribPointer() {
+        // Data for shader[0]
+        GLES32.glBindVertexArray(vao[0]);
+
+        // Enable attributes
+        int positionAttribute =	shader[0].glGetAttribLocation("vertexPos");
+        int normalAttribute =	shader[0].glGetAttribLocation("vertexNor");
+        int colorAttribute =	shader[0].glGetAttribLocation("vertexCol");
+
+        // vertex spatial data
+        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[0]);
+        GLES32.glEnableVertexAttribArray(positionAttribute);
+        GLES32.glVertexAttribPointer(positionAttribute, 3, GLES32.GL_FLOAT, false, 0, 0);
+
+        // vertex normal data
+        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[1]);
+        GLES32.glEnableVertexAttribArray(normalAttribute);
+        GLES32.glVertexAttribPointer(normalAttribute, 3, GLES32.GL_FLOAT, false, 0, 0);
+
+        // vertex color id data
+        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[2]);
+        GLES32.glEnableVertexAttribArray(colorAttribute);
+        GLES32.glVertexAttribPointer(colorAttribute, 1, GLES32.GL_INT, false, 0, 0);
+
+        // EBO
+        GLES32.glBindBuffer(GLES32.GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+
+        // Data for shader[1]
+        GLES32.glBindVertexArray(vao[1]);
+
+        // Enable attributes
+        positionAttribute =	shader[1].glGetAttribLocation("vertexPos");
+        colorAttribute =	shader[1].glGetAttribLocation("vertexCol");
+
+        // vertex spatial data
+        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[0]);
+        GLES32.glEnableVertexAttribArray(positionAttribute);
+        GLES32.glVertexAttribPointer(positionAttribute, 3, GLES32.GL_FLOAT, false, 0, 0);
+
+        // vertex color id data
+        GLES32.glBindBuffer(GLES32.GL_ARRAY_BUFFER, vbo[2]);
+        GLES32.glEnableVertexAttribArray(colorAttribute);
+        GLES32.glVertexAttribPointer(colorAttribute, 1, GLES32.GL_INT, false, 0, 0);
+
+        // EBO
+        GLES32.glBindBuffer(GLES32.GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+
+        // Dereference the vao
+        GLES32.glBindVertexArray(0);
+    }
+
+
     @Override
     protected void loadUniform() {
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 1, false, model, 0);
-        GLES32.glUniform1i(shader[0].glGetUniformLocation("colorTable"), 0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 1, false, model, 0);
+        GLES32.glUniform1i(shader[selectedShader].glGetUniformLocation("colorTable"), 0);
     }
 
 
@@ -552,11 +597,17 @@ public class Bundle extends BaseVisualization {
     public void drawSolid() {
         if (!draw) return;
         configGL();
-
         GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
         GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, hColorTableTexture[0]);
 
-        GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
+        if (selectedShader == 0) GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
+        else {
+            GLES32.glEnable(GLES32.GL_CULL_FACE);
+            GLES32.glCullFace(GLES32.GL_FRONT);
+            GLES32.glFrontFace(GLES32.GL_CCW);
+            GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
+            GLES32.glDisable(GLES32.GL_CULL_FACE);
+        }
 
         boundingbox.drawSolid();
     }
@@ -667,6 +718,21 @@ public class Bundle extends BaseVisualization {
     }
 
 
+    static private void createCylinder(float[] cylinderData, int offset, int cylinderNFaces, float cylinderRadius) {
+        float[] rotationX = new float[4];
+
+        float[] cylinderOffset = {  0, cylinderRadius, 0};
+        Quaternion.fromAngleAndAxis(rotationX, 0, 360f/cylinderNFaces, 1, 0, 0);
+
+        // Rotate vertex
+        for (int i=0; i<cylinderData.length; i+=2) {
+            Quaternion.rotate3V(cylinderOffset,0, rotationX,0);
+            cylinderData[ i+offset ] = cylinderOffset[1];
+            cylinderData[i+1+offset] = cylinderOffset[2];
+        }
+    }
+
+
     public void setDrawBB(boolean newDrawBB) {
         drawBB = newDrawBB;
         boundingbox.setDraw(drawBB);
@@ -737,14 +803,32 @@ public class Bundle extends BaseVisualization {
     //////////////////////////////////////////////
 
 
+    static private void loadStaticUniformData(Shader[] shader) {
+        // create static data
+        float[] cylinderData = new float[(cylinderNFaces+1)*2];
+        createCylinder(cylinderData,0, cylinderNFaces, cylinderRadius);
+
+        // load data
+        shader[1].glUseProgram();
+        FloatBuffer floatBuffer = FloatBuffer.wrap(cylinderData);
+        floatBuffer.rewind();
+        GLES32.glUniform2fv(shader[1].glGetUniformLocation("cylinderVertex"), cylinderData.length, floatBuffer);
+    }
+
+
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
-        String[] vs = {"bundle.vs"};
+        String[] vs_0 = {"bundle.vs"};
         String[] fs = {"standardFragmentShader.fs"};
-        String[] gs = {""};
-        shaderReturn[0] = new Shader(vs, fs, gs, c);
+        String[] gs_0 = {""};
+        shaderReturn[0] = new Shader(vs_0, fs, gs_0, c);
 
+        String[] vs_1 = {"cylinder.vs"};
+        String[] gs_1 = {"cylinder.gs"};
+        shaderReturn[1] = new Shader(vs_1, fs, gs_1, c);
+
+        loadStaticUniformData(shaderReturn);
         return shaderReturn;
     }
 

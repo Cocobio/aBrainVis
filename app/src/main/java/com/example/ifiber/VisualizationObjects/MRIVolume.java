@@ -138,20 +138,20 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     @Override
     protected void loadUniform() {
         // Vertex shader
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 1, false, model,0);
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("S"), 1, false, scaleModel,0);
-        GLES32.glUniform1i(shader[0].glGetUniformLocation("frontIdx"), frontIdx);
-        GLES32.glUniform4f(shader[0].glGetUniformLocation("np"), normalPlane[0], normalPlane[1], normalPlane[2], 0f);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("dPlane"), dPlane);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("dPlaneStep"), dPlaneStep);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 1, false, model,0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("S"), 1, false, scaleModel,0);
+        GLES32.glUniform1i(shader[selectedShader].glGetUniformLocation("frontIdx"), frontIdx);
+        GLES32.glUniform4f(shader[selectedShader].glGetUniformLocation("np"), normalPlane[0], normalPlane[1], normalPlane[2], 0f);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("dPlane"), dPlane);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("dPlaneStep"), dPlaneStep);
 
 		// Fragment shader
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("slope"), slope);
-        GLES32.glUniform1i(shader[0].glGetUniformLocation("mriTexture"), 0);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("threshold"), threshold);
-        GLES32.glUniform3f(shader[0].glGetUniformLocation("eye"), eye[0], eye[1], eye[2]);
-        GLES32.glUniformMatrix3fv(shader[0].glGetUniformLocation("axis"), 1, false, axis,0);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("alpha"), alpha);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("slope"), slope);
+        GLES32.glUniform1i(shader[selectedShader].glGetUniformLocation("mriTexture"), 0);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("threshold"), threshold);
+        GLES32.glUniform3f(shader[selectedShader].glGetUniformLocation("eye"), eye[0], eye[1], eye[2]);
+        GLES32.glUniformMatrix3fv(shader[selectedShader].glGetUniformLocation("axis"), 1, false, axis,0);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("alpha"), alpha);
     }
 
 
@@ -403,7 +403,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
 
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
         String[] vs = {"volume-slice.vs"};
         String[] fs = {"volume.fs"};

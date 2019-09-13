@@ -194,7 +194,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
     @Override
     protected void loadUniform() {
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 1, false, model, 0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 1, false, model, 0);
     }
 
 
@@ -210,8 +210,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         // Draw points
         if (drawPoints) {
-            GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), 1.0f);
-            GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, pColor, 0);
+            GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("opacity"), 1.0f);
+            GLES32.glUniform3fv(shader[selectedShader].glGetUniformLocation("meshColor"), 1, pColor, 0);
 //            GLES32.glLineWidth(0.01f);
             GLES32.glDrawElements(GLES32.GL_POINTS, faces.length, GLES32.GL_UNSIGNED_INT, 0);
 //            GLES32.glLineWidth(1f);
@@ -219,8 +219,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         // Draw lines
         if (drawLines) {
-            GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), 1.0f);
-            GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, lColor, 0);
+            GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("opacity"), 1.0f);
+            GLES32.glUniform3fv(shader[selectedShader].glGetUniformLocation("meshColor"), 1, lColor, 0);
             GLES32.glLineWidth(0.01f);
             GLES32.glDrawElements(GLES32.GL_LINE_LOOP, faces.length, GLES32.GL_UNSIGNED_INT, 0);
             GLES32.glLineWidth(1f);
@@ -232,8 +232,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
             GLES32.glEnable(GLES32.GL_CULL_FACE);
 
             GLES32.glPolygonOffset(1f,1f);
-            GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), alpha);
-            GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, tColor,0);
+            GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("opacity"), alpha);
+            GLES32.glUniform3fv(shader[selectedShader].glGetUniformLocation("meshColor"), 1, tColor,0);
 
             GLES32.glDrawElements(GLES32.GL_TRIANGLES, faces.length, GLES32.GL_UNSIGNED_INT, 0);
 
@@ -264,8 +264,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         GLES32.glBlendFunc(GLES32.GL_SRC_ALPHA, GLES32.GL_ONE_MINUS_SRC_ALPHA);
         GLES32.glPolygonOffset(1f,1f);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("opacity"), alpha);
-        GLES32.glUniform3fv(shader[0].glGetUniformLocation("meshColor"), 1, tColor,0);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("opacity"), alpha);
+        GLES32.glUniform3fv(shader[selectedShader].glGetUniformLocation("meshColor"), 1, tColor,0);
 
         GLES32.glDrawElements(GLES32.GL_TRIANGLES, faces.length, GLES32.GL_UNSIGNED_INT, 0);
 
@@ -345,7 +345,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
 
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
         String[] vs = {"mesh.vs"};
         String[] fs = {"standardFragmentShader.fs"};

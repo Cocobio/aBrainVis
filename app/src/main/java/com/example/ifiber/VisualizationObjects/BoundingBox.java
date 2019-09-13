@@ -170,8 +170,8 @@ public class BoundingBox extends BaseVisualization {
 
     @Override
     protected void loadUniform() {
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("bbM"), 1, false, bbModel, 0);
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 1, false, model, 0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("bbM"), 1, false, bbModel, 0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 1, false, model, 0);
     }
 
 
@@ -204,7 +204,7 @@ public class BoundingBox extends BaseVisualization {
 
 
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
         String[] vs = {"boundingbox.vs"};
         String[] fs = {"standardFragmentShader.fs"};

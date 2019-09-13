@@ -26,4 +26,9 @@
         <item>Mesh</item>
         <item>MRI Volume</item>
     </string-array>
+
+    <string-array name="bundle_rendering_spinner">
+        <item>Lines</item>
+        <item>Cylinders</item>
+    </string-array>
 </resources>

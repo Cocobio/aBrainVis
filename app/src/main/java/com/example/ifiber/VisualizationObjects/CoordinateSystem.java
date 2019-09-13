@@ -192,8 +192,8 @@ public class CoordinateSystem extends BaseVisualization {
 
     @Override
     protected void loadUniform(){
-        GLES32.glUniform4fv(shader[0].glGetUniformLocation("colorArray"), 3, color, 0);
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 3, false, model, 0);
+        GLES32.glUniform4fv(shader[selectedShader].glGetUniformLocation("colorArray"), 3, color, 0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 3, false, model, 0);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class CoordinateSystem extends BaseVisualization {
 
 
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
         String[] vs = {"coordinateSystem.vs"};
         String[] fs = {"standardFragmentShader.fs"};

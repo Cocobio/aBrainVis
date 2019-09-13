@@ -3,13 +3,17 @@ package com.example.ifiber.Controllers;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.ifiber.MainActivity;
@@ -29,6 +33,7 @@ public class Bundle_settings extends ListFragment {
     int percentage;
     public SeekBar percent;
     private com.example.ifiber.VisualizationObjects.Bundle bundle;
+    private Spinner cylinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -36,6 +41,7 @@ public class Bundle_settings extends ListFragment {
 
         String bundleFile = ((MainActivity) getActivity()).BUNDLE_fileSettings;
         FileName = (TextView)view.findViewById(R.id.FileText);
+        cylinder = view.findViewById(R.id.bundle_rendering_spinner);
         item = new ArrayList<String>();
 
         bundle = (com.example.ifiber.VisualizationObjects.Bundle) ((MainActivity) getActivity()).myRenderer.getListDisplayedObjects().get(bundleFile);
@@ -44,6 +50,8 @@ public class Bundle_settings extends ListFragment {
         final Vector<String> bundlesNames = bundle.getBundlesNames();
         DisplayBundles = new boolean[bundlesNames.size()];
         bundle.getSelectedBundles(DisplayBundles, 0);
+
+        cylinder.setSelection(bundle.getSelectedShader());
 
         for (int i=0; i<bundlesNames.size(); i++) item.add(bundlesNames.get(i));
 
@@ -85,6 +93,21 @@ public class Bundle_settings extends ListFragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
+        });
+
+        // Spinner select listener
+        cylinder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                bundle.setSelectedShader(position);
+                ((MainActivity) getActivity()).mGLView.requestRender();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
         });
 
         fileList = new MyBundleListArrayAdapter(getActivity(), item, DisplayBundles);

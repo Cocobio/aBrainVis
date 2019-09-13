@@ -7,12 +7,11 @@ TODO:
     Pop-up view destroys the data
     Open multiples files
     Kd for mri volume is not working
+    Colors being loaded in bundle are read the same way in the shader??
 
 EMERGENCY:
 
 DOING:
-    Bundle
-        Add cylinder drawing (just because)
 
 Testing if DONE:
     Fix apk install failure
@@ -21,11 +20,18 @@ Testing if DONE:
 PATCHES TO BE FIXED:
     After zooming, new fov must be updated in shaders. Must implement a function queue or something for smart updating. *****Delete "configPerspective()" in drawing function onDrawFrame.*****
 
+    Minimize size of settings for lighting and material --- Patched: relative layout not clickable ---
+
     Status bar, home and back button hiding but must eliminate animation.
 
     MRI_settings has a patch for the slider and checkboxs that must be programed better. The slider check whether the user created the event in order to valid it. The Checkbox uses the onclickevent to update the draw value, and the is changed to set the current state.
 
+    Rendering mode spinner changes every bundle object to cylinder drawing. Needs to fetch current drawing shader and not change if other selected a different than the default.
+
 DONE:
+    Bundle
+        Add cylinder drawing (just because)
+
     Minimize size of settings for lighting and material --- Patched: relative layout not clickable ---
 
     Fix lighting parameters in all shaders.

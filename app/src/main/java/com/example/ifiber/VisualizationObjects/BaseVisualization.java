@@ -19,6 +19,8 @@ public class BaseVisualization{
     protected int[] vao;
 
     protected Shader[] shader;
+    protected int selectedShader = 0;
+    static protected int shaderN = 1;
 
     // Matrixs
     protected float[] model = new float[16];
@@ -63,9 +65,9 @@ public class BaseVisualization{
 
 
     protected void configGL() {
-        shader[0].glUseProgram();
+        shader[selectedShader].glUseProgram();
         loadUniform();
-        GLES32.glBindVertexArray(vao[0]);
+        GLES32.glBindVertexArray(vao[selectedShader]);
     }
 
 
@@ -174,6 +176,15 @@ public class BaseVisualization{
 
     public void setDrawBB(boolean newDrawBB) {
         Log.e(TAG, "setDrawBB not implemented in: "+TAG);
+    }
+
+
+    public int getSelectedShader() { return selectedShader; }
+
+
+    public void setSelectedShader(int newSelectedShader) {
+        if (newSelectedShader < shaderN) selectedShader = newSelectedShader;
+        else Log.e(TAG, "Selected shader out of bound ("+newSelectedShader+"), maximum is "+shaderN+".");
     }
 
 

@@ -7,40 +7,54 @@
     android:clickable="true"
     android:paddingLeft="20dp"
     android:gravity="center_horizontal"
-    android:weightSum="1">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="top"
-    android:layout_weight="0.9">
-    <TextView
-        android:id="@+id/FileText"
-        android:layout_width="wrap_content"
+    android:weightSum="10">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:layout_gravity="center_horizontal"
-        android:text="FileName"/>
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_weight="0.8" />
+        android:orientation="vertical"
+        android:gravity="top"
+        android:layout_weight="9">
+        <TextView
+            android:id="@+id/FileText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center_horizontal"
+            android:text="FileName"/>
 
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No Data"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="No Data" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="bottom"
-        android:layout_weight="0.1">
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rendering mode:" />
+            <Spinner
+                android:id="@+id/bundle_rendering_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/bundle_rendering_spinner" />
+        </LinearLayout>
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +66,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:layout_width="wrap_content"

@@ -52,7 +52,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     static final private float FOV_FLOOR_LIMITER = 1.0f;
     static final private float FOV_CEIL_LIMITER = 150.f;
     private float fov = FOV_DEFAULT_VALUE;
-    private Map<VisualizationType, Shader> lightShader = new HashMap<>();
+    private Vector<Shader> lightShader = new Vector<>();
 
     private float[] clearColor = {defaultBackgroundColor[0], defaultBackgroundColor[1], defaultBackgroundColor[2], defaultBackgroundColor[3]};
 
@@ -200,10 +200,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private void populateLightShader() {
         for (Map.Entry<VisualizationType, Shader[]> entry : shaderChain.entrySet())
-            for (Shader s : entry.getValue())
-//        for (Shader[] ss : shaderChain.values())
-//            for (Shader s : ss)
-            {
+            for (Shader s : entry.getValue()) {
                 boolean validator = true;
                 validator &= s.glGetUniformLocation("Light.pos") != -1;
                 validator &= s.glGetUniformLocation("Light.La") != -1;
@@ -216,7 +213,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                 validator &= s.glGetUniformLocation("Material.shininess") != -1;
 
                 if (validator)
-                    lightShader.put(entry.getKey(), s);
+                    lightShader.add(s);
                 else Log.e(TAG, "Light not found for: "+entry.getKey());
             }
 
@@ -224,7 +221,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 
     private void configLight() {
-        for (Shader s : lightShader.values()) {
+        for (Shader s : lightShader) {
             s.glUseProgram();
             GLES32.glUniform3f(s.glGetUniformLocation("Light.pos"), lightPosition[0], lightPosition[1], lightPosition[2]);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.La"), lightLa, lightLa, lightLa);

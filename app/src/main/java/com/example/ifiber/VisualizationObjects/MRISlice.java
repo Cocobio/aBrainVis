@@ -138,19 +138,19 @@ public class MRISlice extends BaseVisualization {
     @Override
     protected void loadUniform() {
         // Vertex shader
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("M"), 1, false, model,0);
-        GLES32.glUniformMatrix4fv(shader[0].glGetUniformLocation("S"), 1, false, scaleModel,0);
-        GLES32.glUniform1i(shader[0].glGetUniformLocation("frontIdx"), frontIdx);
-        GLES32.glUniform4f(shader[0].glGetUniformLocation("np"), normalPlane[0], normalPlane[1], normalPlane[2], 0f);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("dPlane"), dPlane);
-//        GLES32.glUniform1f(shader[0].glGetUniformLocation("dPlaneStep"), 0f);     Not needed because its multiply by gl instance id, which is 0
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("M"), 1, false, model,0);
+        GLES32.glUniformMatrix4fv(shader[selectedShader].glGetUniformLocation("S"), 1, false, scaleModel,0);
+        GLES32.glUniform1i(shader[selectedShader].glGetUniformLocation("frontIdx"), frontIdx);
+        GLES32.glUniform4f(shader[selectedShader].glGetUniformLocation("np"), normalPlane[0], normalPlane[1], normalPlane[2], 0f);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("dPlane"), dPlane);
+//        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("dPlaneStep"), 0f);     Not needed because its multiply by gl instance id, which is 0
 
         // Fragment shader
-        GLES32.glUniform1i(shader[0].glGetUniformLocation("mriTexture"), 0);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("slope"), slope);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("bright"), bright);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("contrast"), contrast);
-        GLES32.glUniform1f(shader[0].glGetUniformLocation("threshold"), discardValues ? threshold : 0.0f);
+        GLES32.glUniform1i(shader[selectedShader].glGetUniformLocation("mriTexture"), 0);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("slope"), slope);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("bright"), bright);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("contrast"), contrast);
+        GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("threshold"), discardValues ? threshold : 0.0f);
     }
 
 
@@ -384,7 +384,7 @@ public class MRISlice extends BaseVisualization {
 
 
     public static Shader[] shaderPrograms(Context c) {
-        Shader[] shaderReturn = new Shader[1];
+        Shader[] shaderReturn = new Shader[shaderN];
 
         String[] vs = {"volume-slice.vs"};
         String[] fs = {"slice.fs"};
