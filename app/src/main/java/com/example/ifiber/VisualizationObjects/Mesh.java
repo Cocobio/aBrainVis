@@ -7,8 +7,12 @@ import android.util.Log;
 
 import com.example.ifiber.Tools.Shader;
 import com.example.ifiber.Tools.SortingAlgorithms;
+import com.example.ifiber.Tools.ThirdParty.Gifti.GIFTI;
+import com.example.ifiber.Tools.ThirdParty.Gifti.GiftiFormatException;
+import com.example.ifiber.Tools.ThirdParty.Gifti.GiftiReader;
 import com.example.ifiber.Tools.VisualizationType;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -21,7 +25,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class Mesh extends BaseVisualization implements CameraBasedVisualizations{
-    public static ArrayList<String> validFileExtensions =  new ArrayList<>(Arrays.asList("mesh"));
+    public static ArrayList<String> validFileExtensions =  new ArrayList<>(Arrays.asList("mesh", "gii"));
     public static VisualizationType identifier = VisualizationType.MESH;
 
     private String filePath;
@@ -93,6 +97,8 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         if (extension.equals("mesh"))
             readMesh();
+        else if (extension.equals("gii"))
+            readGIFTI();
         else
             Log.e(TAG, "Unsupported mesh file: "+extension);
     }
@@ -135,6 +141,86 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         }catch (IOException ex) {
             Log.e(TAG, "Error at reading file "+fileName+" : " + ex.toString());
             System.err.println(ex.getMessage());
+        }
+    }
+
+
+    private void readGIFTI() {
+        GiftiReader reader = new GiftiReader(new File(this.filePath));
+        GIFTI gifti = null;
+
+        try {
+            gifti = reader.parseGiftiXML();
+
+            FloatBuffer points = gifti.getPoints();
+            IntBuffer indices = gifti.getIndices();
+            FloatBuffer normals = gifti.getNormals();
+
+            // init arrays
+            vertex = new float[points.capacity()];
+            faces = new int[indices.capacity()/3*4];
+
+            // populate arrays
+            points.get(vertex);
+            for(int i=0; i<indices.capacity()/3; i++) {
+                indices.get(faces, i*4, 3);
+                faces[i*4+3] = -1;
+            }
+
+            if (normals == null) calculateNormals();
+            else this.normals = normals.array();
+
+
+            // do something with data...
+        } catch (GiftiFormatException ex) {
+            // do something with error...
+        }
+    }
+
+
+    private void calculateNormals() {
+        normals = new float[vertex.length];
+        Arrays.fill(normals, 0);
+
+        float[] n = new float[3];
+        float norm;
+        float[] segment0 = new float[3], segment1 = new float[3];
+
+        for(int i=0; i<faces.length; i+=4) {
+            segment1[0] = vertex[ 3*faces[i+1] ] - vertex[ 3*faces[i] ];
+            segment1[1] = vertex[3*faces[i+1]+1] - vertex[3*faces[i]+1];
+            segment1[2] = vertex[3*faces[i+1]+2] - vertex[3*faces[i]+2];
+
+            segment0[0] = vertex[ 3*faces[i+2] ] - vertex[ 3*faces[i] ];
+            segment0[1] = vertex[3*faces[i+2]+1] - vertex[3*faces[i]+1];
+            segment0[2] = vertex[3*faces[i+2]+2] - vertex[3*faces[i]+2];
+
+            // cross product
+            n[0] = segment1[1]*segment0[2] - segment1[2]*segment0[1];
+            n[1] = segment1[2]*segment0[0] - segment1[0]*segment0[2];
+            n[2] = segment1[0]*segment0[1] - segment1[1]*segment0[0];
+
+            // normalize
+            norm = (float)Math.sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2]);
+            n[0] /= norm;
+            n[1] /= norm;
+            n[2] /= norm;
+
+            normals[ 3*faces[i] ] = n[0];
+            normals[3*faces[i]+1] = n[1];
+            normals[3*faces[i]+2] = n[2];
+        }
+
+        for(int i=0; i<faces.length; i+=4) {
+            // normalize
+            norm = (float)Math.sqrt(
+                    normals[3*faces[i]]  *normals[3*faces[i]] +
+                            normals[3*faces[i]+1]*normals[3*faces[i]+1] +
+                            normals[3*faces[i]+2]*normals[3*faces[i]+2]);
+
+            normals[ 3*faces[i] ] /= norm;
+            normals[3*faces[i]+1] /= norm;
+            normals[3*faces[i]+2] /= norm;
         }
     }
 

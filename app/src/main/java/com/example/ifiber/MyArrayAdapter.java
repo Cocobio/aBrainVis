@@ -53,6 +53,10 @@ public class MyArrayAdapter extends ArrayAdapter<String> {
             imageView.setImageResource(R.drawable.file_icon_mesh);
             textView.setText(values.get(position).replace(".mesh", ""));
         }
+        else if (s.endsWith(".gii")){
+            imageView.setImageResource(R.drawable.file_icon_mesh);
+            textView.setText(values.get(position).replace(".gii", ""));
+        }
         else if (s.equals("back")){
             imageView.setImageResource(R.drawable.directory_up);
             textView.setText(values.get(position).replace("back", ""));

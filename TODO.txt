@@ -1,8 +1,6 @@
 TODO:
     MRI Slice
         GUI for interaction with Slice object
-    Mesh
-        Add support for GIFTI
     Fix sliders in mri_fragment (vertical size is not matching parent)
     Pop-up view destroys the data
     Open multiples files
@@ -30,7 +28,12 @@ PATCHES TO BE FIXED:
 
     Bundle reimplements setSelectedShader(int newSelectedShader), because basevisualization doesnt use the class child variable, but the parent one... find a fix for this.
 
+    Shader for bundle cylinders has quaternion functions copied inside, should be included smarter
+
 DONE:
+    Mesh
+        Add support for GIFTI
+
     Bundle
         Add cylinder drawing (just because)
 
