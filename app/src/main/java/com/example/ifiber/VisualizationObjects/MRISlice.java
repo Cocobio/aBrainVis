@@ -388,7 +388,7 @@ public class MRISlice extends BaseVisualization {
 
         String[] vs = {"volume-slice.vs"};
         String[] fs = {"slice.fs"};
-        String[] gs = {""};
+        String[] gs = {};
         shaderReturn[0] = new Shader(vs, fs, gs, c);
 
         loadStaticUniforms(shaderReturn[0]);

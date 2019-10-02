@@ -34,23 +34,9 @@ public class Shader {
 
 
     private void addShader(String[] vShader, String[] fShader, String[] gShader) {
-        for (String vs : vShader) {
-            if (!"".equals(vs)) {
-                shaders.add(addShader(vs, GLES32.GL_VERTEX_SHADER));
-            }
-        }
-
-        for (String fs : fShader) {
-            if (!"".equals(fs)) {
-                shaders.add(addShader(fs, GLES32.GL_FRAGMENT_SHADER));
-            }
-        }
-
-        for (String gs : gShader) {
-            if (!"".equals(gs)) {
-                shaders.add(addShader(gs, GLES32.GL_GEOMETRY_SHADER));
-            }
-        }
+        if (vShader.length != 0) shaders.add(addShader(vShader, GLES32.GL_VERTEX_SHADER));
+        if (fShader.length != 0) shaders.add(addShader(fShader, GLES32.GL_FRAGMENT_SHADER));
+        if (gShader.length != 0) shaders.add(addShader(gShader, GLES32.GL_GEOMETRY_SHADER));
     }
 
 
@@ -93,6 +79,34 @@ public class Shader {
         GLES32.glAttachShader(program, shader);
         return shader;
     }
+
+
+    private int addShader(String[] shaderFiles, int shaderType) {
+        int shader = GLES32.glCreateShader(shaderType);
+
+        String shaderSource = "";
+        for (String s : shaderFiles) {
+            shaderSource += readFileAsString(s);
+            if (shaderSource == null) Log.e(TAG, "Error at reading shader: "+s);
+        }
+        GLES32.glShaderSource(shader, shaderSource);
+
+        GLES32.glCompileShader(shader);
+
+        int shaderCompileStatus[] = {GLES32.GL_FALSE};
+        GLES32.glGetShaderiv(shader, GLES32.GL_COMPILE_STATUS, shaderCompileStatus, 0);
+
+        if (shaderCompileStatus[0] != GLES32.GL_TRUE) {
+            String info = GLES32.glGetShaderInfoLog(shader);
+            String shaderFileString = shaderFiles[0];
+            for (int i=1; i<shaderFiles.length; i++) shaderFileString += ", " + shaderFiles[i];
+
+            Log.e(TAG, "Files: "+shaderFileString+" Shadercompilation failed: "+info);
+        }
+        GLES32.glAttachShader(program, shader);
+        return shader;
+    }
+
 
     public String readFileAsString(String assetFile) {
         BufferedReader in = null;

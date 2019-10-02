@@ -9,7 +9,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.example.ifiber.Tools.Shader;
-import com.example.ifiber.Tools.ThirdParty.NiftiVolume;
+import com.example.ifiber.Tools.ThirdParty.Nifti.NiftiVolume;
 import com.example.ifiber.Tools.VisualizationType;
 
 import java.io.IOException;

@@ -217,7 +217,7 @@ public class CoordinateSystem extends BaseVisualization {
 
         String[] vs = {"coordinateSystem.vs"};
         String[] fs = {"standardFragmentShader.fs"};
-        String[] gs = {""};
+        String[] gs = {};
         shaderReturn[0] = new Shader(vs, fs, gs, c);
 
         return shaderReturn;

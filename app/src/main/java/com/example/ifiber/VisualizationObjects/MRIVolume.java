@@ -407,7 +407,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
         String[] vs = {"volume-slice.vs"};
         String[] fs = {"volume.fs"};
-        String[] gs = {""};
+        String[] gs = {};
         shaderReturn[0] = new Shader(vs, fs, gs, c);
 
         loadStaticUniforms(shaderReturn[0]);

@@ -821,11 +821,11 @@ public class Bundle extends BaseVisualization {
 
         String[] vs_0 = {"bundle.vs"};
         String[] fs = {"standardFragmentShader.fs"};
-        String[] gs_0 = {""};
+        String[] gs_0 = {};
         shaderReturn[0] = new Shader(vs_0, fs, gs_0, c);
 
         String[] vs_1 = {"cylinder.vs"};
-        String[] gs_1 = {"cylinder.gs"};
+        String[] gs_1 = {"cylinder.gs", "quaternion.sf"};
         shaderReturn[1] = new Shader(vs_1, fs, gs_1, c);
 
         loadStaticUniformData(shaderReturn);

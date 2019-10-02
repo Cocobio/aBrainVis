@@ -1,4 +1,4 @@
-package com.example.ifiber.Tools.ThirdParty;
+package com.example.ifiber.Tools.ThirdParty.Nifti;
 
 /*
  * [LEDataInputStream.java]

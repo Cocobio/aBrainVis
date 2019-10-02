@@ -1,4 +1,4 @@
-package com.example.ifiber.Tools.ThirdParty;
+package com.example.ifiber.Tools.ThirdParty.Nifti;
 
 /* Four-dimensional array implementation that avoids using java's multi-dimensional arrays.
  * <p/>

@@ -435,7 +435,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
 
         String[] vs = {"mesh.vs"};
         String[] fs = {"standardFragmentShader.fs"};
-        String[] gs = {""};
+        String[] gs = {};
         shaderReturn[0] = new Shader(vs, fs, gs, c);
 
         return shaderReturn;
