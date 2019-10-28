@@ -6,6 +6,7 @@ TODO:
     Open multiples files
     Kd for mri volume is not working
     Colors being loaded in bundle are read the same way in the shader??
+    Error when deleting file that is duplicated
 
 EMERGENCY:
 
