@@ -6,7 +6,6 @@ TODO:
     Open multiples files
     Kd for mri volume is not working
     Colors being loaded in bundle are read the same way in the shader??
-    Error when deleting file that is duplicated
 
 EMERGENCY:
 
@@ -32,6 +31,8 @@ PATCHES TO BE FIXED:
     Shader for bundle cylinders has quaternion functions copied inside, should be included smarter
 
 DONE:
+    Error when deleting file that is duplicated
+
     Mesh
         Add support for GIFTI
 

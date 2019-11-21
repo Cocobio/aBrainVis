@@ -13,6 +13,7 @@ import java.util.Map;
 public class BaseVisualization{
     protected VisualizationType identifier = null;
     protected String TAG = "NOT_ASSIGNED";
+    protected String id;
 
     protected int[] vbo;
     protected int[] ebo;
@@ -169,6 +170,17 @@ public class BaseVisualization{
         Matrix.setIdentityM(translateMat, 0);
         Matrix.setIdentityM(scaleMat, 0);
     }
+
+
+    public void setId(String newId, int n) {
+        if (n == 0)
+            id = newId;
+        else
+            id = newId + " ("+n+")";
+    }
+
+
+    public String getId() { return id; }
 
 
     public void setDraw(boolean newDraw) { draw = newDraw; }

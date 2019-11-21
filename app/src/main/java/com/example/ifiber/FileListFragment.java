@@ -17,7 +17,6 @@ import com.example.ifiber.VisualizationObjects.MRI;
 import com.example.ifiber.VisualizationObjects.Mesh;
 
 import java.util.List;
-import java.util.Vector;
 
 public class FileListFragment extends ListFragment {
     public boolean DisplayFiles[];
@@ -44,16 +43,15 @@ public class FileListFragment extends ListFragment {
         DisplayFiles =  new boolean[files.size()];
         fileList = new MyFilesListArrayAdapter(getActivity(),files, DisplayFiles);
 
-        Button SelectAll = (Button) view.findViewById(R.id.delete_button);
-            SelectAll.setOnClickListener(new View.OnClickListener() {
+        Button deleteButton = (Button) view.findViewById(R.id.delete_button);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
                @Override
                 public void onClick(View v) {
                     for(int i=DisplayFiles.length-1; i>=0 ; i--){
-                        Log.e("FLF", "DisplayFiles["+i+"]: "+DisplayFiles[i]);
                         if (DisplayFiles[i]){
                             String fileName = files.get(i);
-                            Log.e("FLF", "fileName: "+fileName);
-                            if (fileName.endsWith(".nii")|| fileName.endsWith(".nii.gz")){
+
+                            if (fileName.contains(".nii") || fileName.contains(".nii.gz")){
                                 String axis[] = { "X","Y","Z","MRI","vol"};
                                 for (String s : axis){
                                     ((MainActivity) getActivity()).myRenderer.sceneTree.remove(((MainActivity) getActivity()).myRenderer.listDisplayedObjects.get(fileName+s));
@@ -80,8 +78,9 @@ public class FileListFragment extends ListFragment {
                     }
                 }
             });
-            Button UnselectAll = (Button) view.findViewById(R.id.settings_button);
-            UnselectAll.setOnClickListener(new View.OnClickListener() {
+
+            Button settingsButton = (Button) view.findViewById(R.id.settings_button);
+            settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int counter = 0;
@@ -96,7 +95,12 @@ public class FileListFragment extends ListFragment {
                         for(int i=0;i< DisplayFiles.length;i++ ){
                             if (DisplayFiles[i]){
                                 String fileName = files.get(i);
-                                String extension = fileName.substring(fileName.lastIndexOf('.')+1);
+                                int dotIndex = fileName.lastIndexOf('.')+1;
+                                int endExtensionIndex = fileName.lastIndexOf(" ");
+                                String extension;
+
+                                if (endExtensionIndex>dotIndex) extension = fileName.substring(dotIndex, endExtensionIndex);
+                                else extension = fileName.substring(dotIndex);
 
                                 if (MRI.validFileExtensions.contains(extension))
                                     ((MainActivity) getActivity()).startMRI_settings(fileName);

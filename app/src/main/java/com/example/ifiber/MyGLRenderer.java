@@ -309,26 +309,51 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         if (Bundle.validFileExtensions.contains(extension)){
             Bundle bundle  = new Bundle(shaderChain, filePath);
             bundle.setDrawBB(bbDefaultState);
+
+            int n = 0;
+            String key = filePath;
+            while (listDisplayedObjects.containsKey(key)){
+                    n++;
+                    key = filePath+" ("+n+")";
+            }
+            bundle.setId(filePath, n);
+
             sceneTree.add(bundle);
-            DisplayedFiles.add(filePath);
-            listDisplayedObjects.put(filePath,bundle);
+            DisplayedFiles.add(bundle.getId());
+            listDisplayedObjects.put(bundle.getId(), bundle);
         }
-        if (Mesh.validFileExtensions.contains(extension)) {
+
+        else if (Mesh.validFileExtensions.contains(extension)) {
             Mesh mesh = new Mesh(shaderChain, filePath);
             mesh.setDrawBB(bbDefaultState);
+
+            int n = 0;
+            String key = filePath;
+            while (listDisplayedObjects.containsKey(key)){
+                n++;
+                key = filePath+" ("+n+")";
+            }
+            mesh.setId(filePath, n);
+
             sceneTree.add(mesh);
-            DisplayedFiles.add(filePath);
+            DisplayedFiles.add(mesh.getId());
             cameraBasedObjects.add(mesh);
-            listDisplayedObjects.put(filePath,mesh);
+            listDisplayedObjects.put(mesh.getId(), mesh);
             mesh.updateCameraEye(camera.getEye(), 0);
         }
 
-        if (MRI.validFileExtensions.contains(extension)) {
+        else if (MRI.validFileExtensions.contains(extension)) {
             MRI mri = new MRI(shaderChain, filePath);
             mri.setDrawBB(bbDefaultState);
             sceneTree.add(mri);
-            DisplayedFiles.add(filePath);
-            listDisplayedObjects.put(filePath+"MRI",mri);
+
+            int n = 0;
+            String key = filePath+"MRI";
+            while (listDisplayedObjects.containsKey(key)){
+                n++;
+                key = filePath+" ("+n+")MRI";
+            }
+            mri.setId(filePath, n);
 
             // Testing MRIVolume
             MRIVolume mriVol = new MRIVolume(shaderChain, mri);
@@ -336,7 +361,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             mriVol.setDrawBB(bbDefaultState);
             sceneTree.add(mriVol);
             cameraBasedObjects.add(mriVol);
-            listDisplayedObjects.put(filePath+"vol",mriVol);
             mriVol.updateCameraEye(camera.getEye(), 0);
 
             // Testing MRISlice
@@ -354,9 +378,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
             sceneTree.add(mriSliceX);
             sceneTree.add(mriSliceY);
             sceneTree.add(mriSliceZ);
-            listDisplayedObjects.put(filePath+"X",mriSliceX);
-            listDisplayedObjects.put(filePath+"Y",mriSliceY);
-            listDisplayedObjects.put(filePath+"Z",mriSliceZ);
+
+            DisplayedFiles.add(mri.getId());
+            listDisplayedObjects.put(mri.getId()+"MRI", mri);
+            listDisplayedObjects.put(mri.getId()+"vol", mriVol);
+            listDisplayedObjects.put(mri.getId()+"X", mriSliceX);
+            listDisplayedObjects.put(mri.getId()+"Y", mriSliceY);
+            listDisplayedObjects.put(mri.getId()+"Z", mriSliceZ);
         }
     }
 
