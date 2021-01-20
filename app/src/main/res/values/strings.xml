@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iFiber</string>
+    <string name="app_name">aBrainVis</string>
 
     <string name="title_section1">Display Settings </string>
     <string name="title_section2">Browse File</string>
@@ -7,6 +7,7 @@
     <string name="title_section4">Reset Camera</string>
     <string name="title_section5">Displayed objects</string>
     <string name="title_section6">Toggle Bounding Boxes</string>
+    <string name="title_section7">Test</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

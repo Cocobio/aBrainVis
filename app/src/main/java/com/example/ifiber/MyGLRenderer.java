@@ -40,10 +40,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     final private float defaultLightLa = 0.5f;
     final private float defaultLightLd = 0.6f;
     final private float defaultLightLs = 1f;
-//    final private float defaultMaterialKa = 1f;
-//    final private float defaultMaterialKd = 0.8f;
-//    final private float defaultMaterialKs = 0.7f;
-//    final private float defaultShininess = 5f;
 
     private Map<VisualizationType, Shader[]> shaderChain = new HashMap<>();
     private Shader[] coordinateSystemShader;
@@ -81,8 +77,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     protected final List<String> DisplayedFiles = new ArrayList<>();
     HashMap<String, Object> listDisplayedObjects = new HashMap<String,  Object>();
 
+
     @Override
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+//        int[] max = new int[1];
+//        GLES32.glGetIntegerv(GLES32.GL_MAX_TEXTURE_SIZE, max, 0);
+//        Log.e(TAG, "maximum texture size: "+max[0]);
+
         int[] maxTextureSize = new int[1], max3DTextureSize = new int[1];
         GLES32.glGetIntegerv(GLES32.GL_MAX_TEXTURE_SIZE, maxTextureSize,0);
         GLES32.glGetIntegerv(GLES32.GL_MAX_3D_TEXTURE_SIZE, max3DTextureSize, 0);
@@ -94,9 +95,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // Shader collection
         shaderChain.put(Bundle.identifier, Bundle.shaderPrograms(context));
         shaderChain.put(Mesh.identifier, Mesh.shaderPrograms(context));
-        shaderChain.put(BoundingBox.identifier, BoundingBox.shaderPrograms(context));
         shaderChain.put(MRIVolume.identifier, MRIVolume.shaderPrograms(context));
         shaderChain.put(MRISlice.identifier, MRISlice.shaderPrograms(context));
+        shaderChain.put(BoundingBox.identifier, BoundingBox.shaderPrograms(context));
 
         // Make the references again after onResume
         for (BaseVisualization i : sceneTree)
@@ -143,6 +144,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
+//        long start = System.currentTimeMillis();
+
         // Shouldn't be here, but cant be called out of the gl thread
         configPerspective();
         configView();
@@ -167,6 +170,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES32.glClear(GLES32.GL_DEPTH_BUFFER_BIT);
         GLES32.glViewport(0,0, coordinateWidth, coordinateHeight);
         coordinateSystem.drawSolid();
+
+//        GLES32.glFinish();
+//        long time = System.currentTimeMillis()-start;
+//        Log.e("TIMER", "Frame Time: "+time+" [ms]");
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
 
@@ -190,17 +203,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     }
 
 
-//    private void setDefaultMaterial() {
-//        materialKa = defaultMaterialKa;
-//        materialKd = defaultMaterialKd;
-//        materialKs = defaultMaterialKs;
-//        shininess = defaultShininess;
-//    }
-
-
     private void populateLightShader() {
         for (Map.Entry<VisualizationType, Shader[]> entry : shaderChain.entrySet())
             for (Shader s : entry.getValue()) {
+                Log.e(TAG, "Processing: "+entry.getKey());
                 boolean validator = true;
                 validator &= s.glGetUniformLocation("Light.pos") != -1;
                 validator &= s.glGetUniformLocation("Light.La") != -1;
@@ -221,9 +227,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 
     private void configLight() {
+        float[] eye = camera.getEyeScaled();
+
         for (Shader s : lightShader) {
             s.glUseProgram();
-            GLES32.glUniform3f(s.glGetUniformLocation("Light.pos"), lightPosition[0], lightPosition[1], lightPosition[2]);
+            GLES32.glUniform4f(s.glGetUniformLocation("Light.pos"), eye[0], eye[1], eye[2], 1.0f);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.La"), lightLa, lightLa, lightLa);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.Ld"), lightLd, lightLd, lightLd);
             GLES32.glUniform3f(s.glGetUniformLocation("Light.Ls"), lightLs, lightLs, lightLs);
@@ -541,5 +549,24 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 //        Actualizar los shaders
 //        for (BaseVisualization i : sceneTree)
 //            i.onResume(shaderChain);
+    }
+
+    public void test(int p) {
+        int percentage = p;
+
+        for (BaseVisualization obj : sceneTree)
+            ((Bundle) obj).setPercentage(percentage);
+    }
+
+    public void test2(float f) {
+        float fr = f;
+
+        int skipfirst = 0;
+
+        for (BaseVisualization obj : sceneTree) {
+            if(skipfirst++==0) continue;
+            ((MRIVolume) obj).setSubSamplingFactor(fr);
+            break;
+        }
     }
 }

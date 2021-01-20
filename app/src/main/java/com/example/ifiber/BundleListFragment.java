@@ -97,7 +97,6 @@ public class BundleListFragment extends ListFragment {
         ((CheckBox)v.findViewById(R.id.bundlecheckbox)).toggle();
         DisplayBundles[position] = !DisplayBundles[position];
 
-//        ((MainActivity) getActivity()).myRenderer.flagPartialData=true;
         ((MainActivity) getActivity()).mGLView.requestRender();
     }
 
@@ -106,7 +105,6 @@ public class BundleListFragment extends ListFragment {
             DisplayBundles[i] = isChecked;
         }
         fileList.notifyDataSetChanged();
-//        ((MainActivity) getActivity()).myRenderer.flagPartialData=true;
         ((MainActivity) getActivity()).mGLView.requestRender();
     }
 

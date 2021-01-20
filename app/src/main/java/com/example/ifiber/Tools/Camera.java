@@ -192,7 +192,15 @@ public class Camera {
 
 
     public float[] getEye() {
-        float[] currentEye = {eye[0]*radius, eye[1]*radius, eye[2]*radius, 1};
+        float[] currentEye = {eye[0]*radius, eye[1]*radius, eye[2]*radius, 1.0f};
+        Quaternion.rotate3V(currentEye,0, rotation,0);
+        for (int i=0; i<3; i++) currentEye[i] += center[i];
+
+        return currentEye;
+    }
+
+    public float[] getEyeScaled() {
+        float[] currentEye = {eye[0]*radius*scaleFactor, eye[1]*radius*scaleFactor, eye[2]*radius*scaleFactor, 1.0f};
         Quaternion.rotate3V(currentEye,0, rotation,0);
         for (int i=0; i<3; i++) currentEye[i] += center[i];
 

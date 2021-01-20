@@ -25,7 +25,7 @@ import java.util.Vector;
 
 public class Bundle extends BaseVisualization {
     static final private int cylinderNFaces = 7;
-    static final private float cylinderRadius = 0.15f;
+    static final private float cylinderRadius = 0.3f;
     public static ArrayList<String> validFileExtensions =  new ArrayList<>(Arrays.asList("bundles", "tck", "trk"));
     public static VisualizationType identifier = VisualizationType.BUNDLE;
     
@@ -600,14 +600,15 @@ public class Bundle extends BaseVisualization {
         GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
         GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, hColorTableTexture[0]);
 
-        if (selectedShader == 0) GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
-        else {
-            GLES32.glEnable(GLES32.GL_CULL_FACE);
-            GLES32.glCullFace(GLES32.GL_FRONT);
-            GLES32.glFrontFace(GLES32.GL_CCW);
+//        if (selectedShader == 0)
             GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
-            GLES32.glDisable(GLES32.GL_CULL_FACE);
-        }
+//        else {
+//            GLES32.glEnable(GLES32.GL_CULL_FACE);
+//            GLES32.glCullFace(GLES32.GL_FRONT);
+//            GLES32.glFrontFace(GLES32.GL_CCW);
+//            GLES32.glDrawElements(GLES32.GL_LINE_STRIP, elementLength, GLES32.GL_UNSIGNED_INT, 0);
+//            GLES32.glDisable(GLES32.GL_CULL_FACE);
+//        }
 
         boundingbox.drawSolid();
     }
@@ -758,11 +759,12 @@ public class Bundle extends BaseVisualization {
 
 
     private void createNewEBO() {
+        long start = System.currentTimeMillis();
         int j, index=0, fw_iterator=0, bw_iterator=element.length;
         float step=100.0f/percentage;
 
         for (int i=0; i<selectedBundles.length; i++) {
-            if (selectedBundles[i])
+            if (selectedBundles[i]) {
                 for (j = 0; step *j < bundlesStart[i + 1] - bundlesStart[i]; j++) {
                     for (int k = 0; k < fiberSizes[bundlesStart[i] + ((int) (step * j))]; k++)
                         element[fw_iterator++] = index++;
@@ -771,12 +773,17 @@ public class Bundle extends BaseVisualization {
                     for (int k = ((int) (step * j)) + bundlesStart[i] + 1; k < Math.min(((int)(step * (j + 1))) + bundlesStart[i], bundlesStart[i + 1]); k++)
                         index += fiberSizes[k];
                 }
-            else
+            }
+            else {
                 for (int k=bundlesStart[i]; k<bundlesStart[i+1]; k++) index += fiberSizes[k];
+            }
         }
 
         elementLength = fw_iterator;
         updateEBOFlag = true;
+
+        long time = System.currentTimeMillis()-start;
+        Log.e("TIMER", "NewEBO creation: "+time+" [ms]");
     }
 
 
@@ -841,7 +848,6 @@ public class Bundle extends BaseVisualization {
 
     public static void updateMaterialValues(Map<VisualizationType, Shader[]> shaderChain) {
         Shader[] ss = shaderChain.get(identifier);
-
 
         for (Shader s : ss) {
             s.glUseProgram();

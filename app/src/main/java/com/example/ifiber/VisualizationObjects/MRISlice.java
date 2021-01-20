@@ -221,15 +221,18 @@ public class MRISlice extends BaseVisualization {
         GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
         GLES32.glBindTexture(GLES32.GL_TEXTURE_3D, hMRITexture[0]);
 
-        if (linearInterpolation) GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
+        if (linearInterpolation) {
+            // Filtered, otherwise binary textures don't have a good visual representation
+            GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_LINEAR);
+            GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_LINEAR);
+
+            GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
+        }
         else {
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_NEAREST);
 
             GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
-
-            GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_LINEAR);
-            GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_LINEAR);
         }
 
         boundingbox.drawSolid();
@@ -354,6 +357,10 @@ public class MRISlice extends BaseVisualization {
 
     public void setLinearInterpolation(boolean activateLinearInter) {
         linearInterpolation = activateLinearInter;
+    }
+
+    public boolean getLinearInterpolation() {
+        return linearInterpolation;
     }
 
 

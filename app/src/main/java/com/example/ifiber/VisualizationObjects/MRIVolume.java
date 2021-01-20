@@ -34,7 +34,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     private float slope;
 
     private boolean drawInside = false;
-    private float subSamplingFactor = 0.35f;
+    private float subSamplingFactor = 0.2f;
     private float threshold;
     private float alpha = 0.5f;
 
@@ -45,7 +45,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     static private final float[] vertexPoints = {   1,1,0,  1,1,1,	0,1,0,	0,1,1,
                                                     1,0,0,	1,0,1,	0,0,0,	0,0,1};
 
-    private final static float[] materialValues = {0.5f, 0.6f, 0.4f, 2f};
+    private final static float[] materialValues = {0.1f, 0.6f, 0.2f, 100f};
 
     public MRIVolume(Map<VisualizationType, Shader[]> shaderChain, MRI mri) {
         super();
@@ -84,7 +84,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
         calculateAxisMat3();
 
         // Sampling frequency
-        sliceFr = (int)(2*Math.sqrt(MRIDimension[0]*MRIDimension[0] + MRIDimension[1]*MRIDimension[1] + MRIDimension[2]*MRIDimension[2]));
+        sliceFr = (int)(Math.sqrt(MRIDimension[0]*MRIDimension[0] + MRIDimension[1]*MRIDimension[1] + MRIDimension[2]*MRIDimension[2]));
 
         openGLLoaded = false;
         draw = true;
@@ -92,7 +92,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
 
         boundingbox = new BoundingBox(shaderChain, mri.boundingbox.dim, 0, mri.boundingbox.center, 0, model, mri.activeTransform);
 
-        Log.d(TAG, "MRI Volume visualization ready: "+filePath);
+        Log.d(TAG, "MRI Volume visualization ready: "+filePath+" with threshold: "+ threshold);
     }
 
     public void setDraw(boolean D){
@@ -201,6 +201,12 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
         setDPlaneAndStep();
     }
 
+    private void configTexture() {
+        // Filtered, otherwise binary textures don't have a good visual representation
+        GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_LINEAR);
+        GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_LINEAR);
+    }
+
 
     private void calculateAxisMat3() {
         float[] x = {1, 0, 0, 1};
@@ -244,6 +250,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     public void drawSolid() {
         if (!draw || alpha!=1f) return;
         configGL();
+        configTexture();
 
         GLES32.glActiveTexture(GLES32.GL_TEXTURE0);
         GLES32.glBindTexture(GLES32.GL_TEXTURE_3D, hMRITexture[0]);
@@ -258,6 +265,7 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
     public void drawTransparent() {
         if (!draw || alpha==1f) return;
         configGL();
+        configTexture();
 
         GLES32.glEnable(GLES32.GL_BLEND);
         GLES32.glBlendFunc(GLES32.GL_SRC_ALPHA, GLES32.GL_ONE_MINUS_SRC_ALPHA);
@@ -372,6 +380,15 @@ public class MRIVolume extends BaseVisualization implements CameraBasedVisualiza
             dPlane = dPlaneEnd;
             dPlaneStep = (dPlaneBegin - dPlaneEnd)/(subSamplingFactor*sliceFr);
         }
+    }
+
+
+    public void setSubSamplingFactor(float fr) {
+        if (fr <= 0) return;
+
+        subSamplingFactor = fr;
+        Log.e(TAG,"subsampling: "+fr);
+        setDPlaneAndStep();
     }
 
 

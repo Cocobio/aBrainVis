@@ -15,6 +15,7 @@ import com.example.ifiber.Controllers.MRI_settings;
 import com.example.ifiber.Controllers.Mesh_settings;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    private int tmp_counter=0;
 
     public GLSurfaceView mGLView;
     public MyGLRenderer myRenderer;
@@ -127,6 +128,60 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 myRenderer.toggleBoundingBoxes();
                 mGLView.requestRender();
                 break;
+//            case 6:
+//                Log.e("MAINACTIVITY", "TESTING TESTING");
+//                int test=2;
+//
+//                switch (test) {
+//                    case 0:
+//                        tmp_counter = tmp_counter%100+5;
+//                        /// TESTING FRAMERATE FIBERS
+////                        for (int p=1; p<101; p+=1) {
+//                            Log.e("Percentage", "" + tmp_counter);
+//                            myRenderer.test(tmp_counter);
+////                            int c = myRenderer.tmp_delete_counter + 1;
+//                            mGLView.requestRender();
+////                            while (c != myRenderer.tmp_delete_counter) {
+////                            }
+////                            try {
+////                                Thread.sleep(500);
+////                            } catch (InterruptedException e) {
+////                                // TODO Auto-generated catch block
+////                                e.printStackTrace();
+////                            }
+////                        }
+//                        break;
+//                    case 1:
+//                        /// TESTING EBO CREATION
+//                        Log.e("Percentage", "" + 10);
+//                        for (int i=0; i<10; i++)
+//                            myRenderer.test(10);
+//                        try {
+//                            Thread.sleep(500);
+//                        } catch (InterruptedException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        }
+//                        Log.e("Percentage", "" + 90);
+//                        for (int i=0; i<10; i++)
+//                            myRenderer.test(90);
+//
+//                        break;
+//
+//                    default:
+//                        /// TESTING VOLUME RENDER FRAMERATE
+//                        tmp_counter = tmp_counter%100+1;
+//                        float fr = 0.2f;
+//
+//                        Log.e("subSampling", "" + (fr*tmp_counter));
+//                        myRenderer.test2(fr*tmp_counter);
+//                        mGLView.requestRender();
+//
+//                        break;
+//
+//                }
+
+//                break;
         }
     }
 

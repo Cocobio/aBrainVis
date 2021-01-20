@@ -145,9 +145,6 @@ public class MRI extends BaseVisualization {
         float[] bgColor = {1.0f, 1.0f, 1.0f, 1.0f};
         GLES32.glTexParameterfv(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_BORDER_COLOR, bgColor,0);
 
-        GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
-        GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_NEAREST);
-
 //		# Not filtered
 //		# glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
 //		# glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
@@ -258,5 +255,20 @@ public class MRI extends BaseVisualization {
     @Override
     public void updateReferenceToShader(Map<VisualizationType, Shader[]> shaderChain) {
         boundingbox.updateReferenceToShader(shaderChain);
+    }
+
+    public float getMax() {
+        int X = MRIDimension[0],
+            Y = MRIDimension[1],
+            Z = MRIDimension[2];
+        float max = 0f;
+
+        for (int i=0; i<X; i++)
+            for (int j=0; j<Y; j++)
+                for (int k=0; k<Z; k++)
+                    if (MRIVolume[i*Y*Z+j*Z+k]>max)
+                        max = MRIVolume[i*Y*Z+j*Z+k];
+
+        return max;
     }
 }

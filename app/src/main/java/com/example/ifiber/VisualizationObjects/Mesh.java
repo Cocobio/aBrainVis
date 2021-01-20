@@ -316,6 +316,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         if (alpha == 1f && drawTriangles) {
             GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
             GLES32.glEnable(GLES32.GL_CULL_FACE);
+            GLES32.glCullFace(GLES32.GL_BACK);
 
             GLES32.glPolygonOffset(1f,1f);
             GLES32.glUniform1f(shader[selectedShader].glGetUniformLocation("opacity"), alpha);
@@ -347,6 +348,7 @@ public class Mesh extends BaseVisualization implements CameraBasedVisualizations
         GLES32.glEnable(GLES32.GL_POLYGON_OFFSET_FILL);
         GLES32.glEnable(GLES32.GL_BLEND);
         GLES32.glEnable(GLES32.GL_CULL_FACE);
+        GLES32.glCullFace(GLES32.GL_BACK);
 
         GLES32.glBlendFunc(GLES32.GL_SRC_ALPHA, GLES32.GL_ONE_MINUS_SRC_ALPHA);
         GLES32.glPolygonOffset(1f,1f);
