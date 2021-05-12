@@ -1,4 +1,4 @@
-package com.example.ifiber;
+package com.udec_biomed.aBrainVis;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
