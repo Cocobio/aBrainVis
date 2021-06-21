@@ -1,6 +1,11 @@
 package com.udec_biomed.aBrainVis;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +21,8 @@ import com.udec_biomed.aBrainVis.Controllers.Mesh_settings;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     private int tmp_counter=0;
+
+    final private int READ_STORAGE_PERMISSION_CODE = 100;
 
     public GLSurfaceView mGLView;
     public MyGLRenderer myRenderer;
@@ -62,6 +69,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         mGLView = new MyGLSurfaceView(this,myRenderer);
         GLcontainer=(FrameLayout)findViewById(R.id.c1);
         GLcontainer.addView(mGLView);
+
+
     }
 
     @Override
@@ -85,7 +94,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                     if(MESH_settingsFragment.isAdded())
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).remove(MESH_settingsFragment).commit();
 
-                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FBFragment).commit();
+                    if (ContextCompat.checkSelfPermission( getBaseContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION_CODE);
+                    else
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FBFragment).commit();
                     }
                 break;
             case 2:
@@ -235,5 +247,17 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == READ_STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                fragmentManager.beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_right).add(R.id.c3, FBFragment).commit();
+        }
+        else
+            Log.e("MainActivity", "Unrecognized request code.");
     }
 }
