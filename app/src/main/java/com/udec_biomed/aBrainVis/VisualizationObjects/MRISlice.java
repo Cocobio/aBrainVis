@@ -1,3 +1,10 @@
+/*
+Latest devices cant render the texture if set to linear interpolation.
+It is working only with nearest.
+    - linearInterpolation = false
+
+ */
+
 package com.udec_biomed.aBrainVis.VisualizationObjects;
 
 import android.content.Context;
@@ -31,7 +38,7 @@ public class MRISlice extends BaseVisualization {
     private float MRIVolumeMax;
     private float slope, bright, contrast;
     private boolean discardValues = false;
-    private boolean linearInterpolation = true;
+    private boolean linearInterpolation = false;
 
     private float threshold;
 
@@ -225,15 +232,12 @@ public class MRISlice extends BaseVisualization {
             // Filtered, otherwise binary textures don't have a good visual representation
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_LINEAR);
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_LINEAR);
-
-            GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
         }
         else {
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
             GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_NEAREST);
-
-            GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
         }
+        GLES32.glDrawArraysInstanced(GLES32.GL_TRIANGLE_FAN, 0, 6, 1);
 
         boundingbox.drawSolid();
     }

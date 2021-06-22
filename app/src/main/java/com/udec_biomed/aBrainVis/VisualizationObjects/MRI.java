@@ -146,8 +146,8 @@ public class MRI extends BaseVisualization {
         GLES32.glTexParameterfv(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_BORDER_COLOR, bgColor,0);
 
 //		# Not filtered
-//		# glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-//		# glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+//		GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MIN_FILTER, GLES32.GL_NEAREST);
+//		GLES32.glTexParameteri(GLES32.GL_TEXTURE_3D, GLES32.GL_TEXTURE_MAG_FILTER, GLES32.GL_NEAREST);
 
 //		# Must swap axes 0 and 2, cuz data is not alined
         FloatBuffer volumeBuffer = FloatBuffer.wrap(MRIVolume);
